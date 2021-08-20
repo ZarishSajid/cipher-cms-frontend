@@ -14,6 +14,7 @@ import {
   TablesWidget12,
   TablesWidget13,
 } from '../../../../_metronic/partials/widgets'
+import { toAbsoluteUrl} from '../../../../_metronic/helpers'
 
 const Tables: FC = () => {
   return (
@@ -21,8 +22,6 @@ const Tables: FC = () => {
 
             
   	<div className="content d-flex flex-column flex-column-fluid" id="kt_content">
-						
-							
 							
 							
 						<div className="post d-flex flex-column-fluid" id="kt_post">
@@ -429,7 +428,9 @@ const Tables: FC = () => {
 																<div className="symbol symbol-circle symbol-50px overflow-hidden me-3">
 																	<a href="/metronic8/demo1/../demo1/apps/user-management/users/view.html">
 																		<div className="symbol-label">
-																			<img src="/metronic8/demo1/assets/media/avatars/150-8.jpg" alt="Francis Mitcham" className="w-100"/>
+
+
+																			<img  alt="Francis Mitcham" className="w-100"  src={toAbsoluteUrl('/media/illustrations/150-8.jpg')} />
 																		</div>
 																	</a>
 																</div>
@@ -566,7 +567,8 @@ const Tables: FC = () => {
 																<div className="symbol symbol-circle symbol-50px overflow-hidden me-3">
 																	<a href="/metronic8/demo1/../demo1/apps/user-management/users/view.html">
 																		<div className="symbol-label">
-																			<img src="/metronic8/demo1/assets/media/avatars/150-6.jpg" alt="Dan Wilson" className="w-100"/>
+																		<img  alt="Dan Wilson" className="w-100"  src={toAbsoluteUrl('/media/illustrations/150-8.jpg')} />
+
 																		</div>
 																	</a>
 																</div>

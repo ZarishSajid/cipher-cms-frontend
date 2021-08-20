@@ -95,25 +95,30 @@ export function AsideMenuMain() {
           <span className='menu-section text-muted text-uppercase fs-8 ls-1'>User Management</span>
         </div>
       </div>
-
-      {/* <AsideMenuItemWithSub
-        to='/apps/user-managent'
-        title='User Management'
+   
+       <AsideMenuItemWithSub
+        to='/apps/user-management'
+        title='Roles'
         fontIcon='bi-chat-left'
         icon='/media/icons/duotone/Communication/Group-chat.svg'
-      > */}
-      {/* <AsideMenuItem to='/crafted/pages/profile/overview' title='Overview' hasBullet={true} /> */}
+      > 
       <AsideMenuItem
-        icon='/media/icons/duotone/Design/PenAndRuller.svg'
+      hasBullet={true}
         to='/crafted/pages/profile/projects'
         title='Role List'
       />
       <AsideMenuItem
-        icon='/media/icons/duotone/Communication/Group-chat.svg'
-        to='/crafted/widgets/tables'
+      hasBullet={true}
+      to='/crafted/widgets/tables'
         title='View Role'
       />
-
+     
+      </AsideMenuItemWithSub>
+      <AsideMenuItem
+      hasBullet={true}
+        to='/apps/Permissions'
+        title='Permissions'
+      />
       {/* <AsideMenuItem to='/crafted/pages/profile/campaigns' title='Campaigns' hasBullet={true} />
           <AsideMenuItem to='/crafted/pages/profile/documents' title='Documents' hasBullet={true} /> */}
       {/* <AsideMenuItem

@@ -2,9 +2,9 @@ import React from 'react'
 import {Redirect, Route, Switch} from 'react-router-dom'
 import {PageLink, PageTitle} from '../../../../../_metronic/layout/core'
 
-import {Private} from '../../user-managemet/components/roles/Private'
-import {Group} from '../../user-managemet/components/roles/Group'
-import {Drawer} from '../../user-managemet/components/roles/Drawer'
+import {Private} from '../../user-management/components/roles/Private'
+import {Group} from '../../user-management/components/roles/Group'
+import {Drawer} from '../../user-management/components/roles/Drawer'
 
 const chatBreadCrumbs: Array<PageLink> = [
   {
