@@ -5,11 +5,9 @@ const Permissions: React.FC = () => {
 
 <div>
 <PageTitle breadcrumbs={[]}>Permissions List</PageTitle>
-								</div>
+                            	</div>
     )
     
-    
- 
 } 
 
 
