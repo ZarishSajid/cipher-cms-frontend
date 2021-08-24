@@ -96,6 +96,26 @@ export function AsideMenuMain() {
         </div>
       </div>
    
+      <AsideMenuItemWithSub
+        to='/apps'
+        title='Users'
+        fontIcon='bi-chat-left'
+        icon='/media/icons/duotone/Communication/Group-chat.svg'
+      > 
+      <AsideMenuItem
+      hasBullet={true}
+        to='/apps/UserList'
+        title='Users List'
+      />
+      <AsideMenuItem
+      hasBullet={true}
+      to='/apps/ViewUser'
+        title='View User'
+      />
+     
+      </AsideMenuItemWithSub>
+
+
        <AsideMenuItemWithSub
         to='/apps/user-management'
         title='Roles'
@@ -119,6 +139,9 @@ export function AsideMenuMain() {
         to='/apps/Permissions'
         title='Permissions'
       />
+
+
+
       {/* <AsideMenuItem to='/crafted/pages/profile/campaigns' title='Campaigns' hasBullet={true} />
           <AsideMenuItem to='/crafted/pages/profile/documents' title='Documents' hasBullet={true} /> */}
       {/* <AsideMenuItem
