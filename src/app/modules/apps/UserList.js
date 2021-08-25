@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
 import axios from 'axios'
+import {Link} from 'react-router-dom'
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -11,7 +12,6 @@ class UsersList extends React.Component {
       role: '',
       value: '',
       name: '',
-      show: false,
       image: null,
     }
     this.handleUsername = this.handleUsername.bind(this)
@@ -19,12 +19,13 @@ class UsersList extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this)
     this.onValueChange = this.onValueChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
-    this.toggle=this. toggle.bind(this)
   }
-  toggle() {
+  
+  handleChange(event) {
     this.setState({
-      open: !this.state.open,
-    });
+      image: URL.createObjectURL(event.target.files[0]),
+    })
+    console.log('Image', event.target.value)
   }
   handleBack = () => {
     this.setState({
@@ -32,17 +33,6 @@ class UsersList extends React.Component {
       open: !this.state.open,
     });
   };
-  handleChange(event) {
-    this.setState({
-      image: URL.createObjectURL(event.target.files[0]),
-    })
-    console.log('Image', event.target.value)
-  }
-  closeModal(e) {
-    this.setState({
-      visible : false
-  });
-  }
   handleSubmit(e) {
     e.preventDefault()
     const data = {
@@ -83,13 +73,14 @@ class UsersList extends React.Component {
   }
 
   render() {
+
     const { open, openActive } = this.state;
 
     return (
       <div>
-        <PageTitle breadcrumbs={[]}>Users List</PageTitle>
-
+    
         <div className='content d-flex flex-column flex-column-fluid' id='kt_content'>
+
           <div className='toolbar' id='kt_toolbar'>
             <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
               <div
@@ -842,7 +833,7 @@ class UsersList extends React.Component {
                             </span>
                           </div>
                         </div>
-                        <div open={open} toggle={this.toggle} className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
+                        <div  className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
                           <form
                             id='kt_modal_add_user_form'
                             className='form fv-plugins-bootstrap5 fv-plugins-framework'
@@ -965,7 +956,7 @@ class UsersList extends React.Component {
 
                             <div className='text-center pt-15'>
                               <button
-                               id='modal' onClick={(e) => this.closeModal(e)}
+                                onClick={this.handleBack}
                                 type='reset'
                                 className='btn btn-light me-3'
                                 data-kt-users-modal-action='cancel'

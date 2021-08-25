@@ -53,7 +53,6 @@ class UsersList extends React.Component <any,any> {
   render() {
     return (
       <div>
-        <PageTitle breadcrumbs={[]}>Users List</PageTitle>
 
         <div className='content d-flex flex-column flex-column-fluid' id='kt_content'>
           <div className='toolbar' id='kt_toolbar'>
@@ -125,6 +124,8 @@ class UsersList extends React.Component <any,any> {
                     data-kt-menu='true'
                     id='kt_menu_6122397430c94'
                   >
+                            <PageTitle breadcrumbs={[]}>Users List</PageTitle>
+
                     <div className='px-7 py-5'>
                       <div className='fs-5 text-dark fw-bolder'>Filter Options</div>
                     </div>
