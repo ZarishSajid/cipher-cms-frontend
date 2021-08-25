@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
-import axios from "axios";
+import axios from 'axios'
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -11,50 +11,60 @@ class UsersList extends React.Component {
       role: '',
       value: '',
       name: '',
-      image: null
-
+      show: false,
+      image: null,
     }
-
     this.handleUsername = this.handleUsername.bind(this)
     this.handleEmail = this.handleEmail.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
     this.onValueChange = this.onValueChange.bind(this)
-    this.handleChange=this.handleChange.bind(this)
+    this.handleChange = this.handleChange.bind(this)
+    this.toggle=this. toggle.bind(this)
   }
+  toggle() {
+    this.setState({
+      open: !this.state.open,
+    });
+  }
+  handleBack = () => {
+    this.setState({
+      //openActive: !this.state.openActive,
+      open: !this.state.open,
+    });
+  };
   handleChange(event) {
     this.setState({
-      image: URL.createObjectURL(event.target.files[0])
+      image: URL.createObjectURL(event.target.files[0]),
     })
-    console.log('Image',event.target.value)
-
+    console.log('Image', event.target.value)
   }
-  handleSubmit() {
-        const data = {
-          username:this.state.username,
-          email: this.state.email,
-          role:this.state.role,
-          image: this.state.image,
-        };
-  
-        axios
-          .post(`http://localhost:8080/adduser`, data)
-
-          .then((res) => {
-            console.log("RESPONSE = ", res);
-            console.log(res.message);
-            if (res.data.success) {
-              alert("Added Sucessfully");
-            } else {
-              //  console.log("else")
-              alert(res.data.message);
-            }
-
-            //res.sucess=();
-          });
+  closeModal(e) {
+    this.setState({
+      visible : false
+  });
+  }
+  handleSubmit(e) {
+    e.preventDefault()
+    const data = {
+      username: this.state.username,
+      email: this.state.email,
+      role: this.state.role,
+      image: this.state.image,
+    }
+    axios.post(`http://localhost:8080/adduser`, data).then((res) => {
+      console.log('RESPONSE = ', res)
+      console.log(res.message)
+      if (res.data.success) {
+        alert('Added Sucessfully')
+        window.location.href = '/apps/UserList'
+      } else {
+        alert(res.data.message)
       }
+    })
+  }
   onValueChange(e) {
     this.setState({
-    role: e.target.value,
+      role: e.target.value,
     })
     console.log('role =', e.target.value)
   }
@@ -71,8 +81,10 @@ class UsersList extends React.Component {
     })
     console.log('email =', this.state.email)
   }
- 
+
   render() {
+    const { open, openActive } = this.state;
+
     return (
       <div>
         <PageTitle breadcrumbs={[]}>Users List</PageTitle>
@@ -830,7 +842,7 @@ class UsersList extends React.Component {
                             </span>
                           </div>
                         </div>
-                        <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
+                        <div open={open} toggle={this.toggle} className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
                           <form
                             id='kt_modal_add_user_form'
                             className='form fv-plugins-bootstrap5 fv-plugins-framework'
@@ -849,14 +861,11 @@ class UsersList extends React.Component {
                             >
                               <div className='fv-row mb-7'>
                                 <label className='d-block fw-bold fs-6 mb-5'>Avatar</label>
-                                <img   width="100px" height="100px" src={this.state.image} />
-                                <br/>
-                                <br/>
+                                <img width='100px' height='100px' src={this.state.image} />
+                                <br />
+                                <br />
 
                                 <input type='file' onChange={this.handleChange} />
-                               
-
-
 
                                 <div className='form-text'>Allowed file types: png, jpg, jpeg.</div>
                               </div>
@@ -956,6 +965,7 @@ class UsersList extends React.Component {
 
                             <div className='text-center pt-15'>
                               <button
+                               id='modal' onClick={(e) => this.closeModal(e)}
                                 type='reset'
                                 className='btn btn-light me-3'
                                 data-kt-users-modal-action='cancel'
