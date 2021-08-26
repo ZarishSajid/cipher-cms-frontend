@@ -958,6 +958,7 @@ class UsersList extends React.Component {
                               <button
                                 onClick={this.handleBack}
                                 type='reset'
+                                data-bs-dismiss="modal"
                                 className='btn btn-light me-3'
                                 data-kt-users-modal-action='cancel'
                               >

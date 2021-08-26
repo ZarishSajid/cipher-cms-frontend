@@ -17,6 +17,11 @@ export function PrivateRoutes() {
   const UsersList=lazy(()=>import('../modules/apps/UsersList'))
   const ViewUser=lazy(()=>import('../modules/apps/ViewUser'))
   const UserList=lazy(()=>import('../modules/apps/UserList'))
+  const viewCarriers=lazy(()=>import('../modules/apps/viewCarriers'))
+  const bulkImport=lazy(()=>import('../modules/apps/bulkImport'))
+  const ViewCustomers=lazy(()=>import('../modules/apps/customers/ViewCustomers'))
+  const AddCustomers=lazy(()=>import('../modules/apps/customers/AddCustomers'))
+
   return (
     <Suspense fallback={<FallbackView />}>
       <Switch>
@@ -34,6 +39,10 @@ export function PrivateRoutes() {
         <Route path='/apps/UsersList' component={UsersList}/>
         <Route path='/apps/ViewUser' component={ViewUser}/>
         <Route path='/apps/UserList' component={UserList}/>
+        <Route path='/apps/viewCarriers' component={viewCarriers}/>
+        <Route path='/apps/bulkImport' component={bulkImport}/>
+        <Route path='/apps/customers/ViewCustomers' component={ViewCustomers} />
+        <Route path='/apps/customers/AddCustomers' component={AddCustomers} />
         <Redirect from='/auth' to='/dashboard' />
         <Redirect exact from='/' to='/dashboard' />
         <Redirect to='error/404' />

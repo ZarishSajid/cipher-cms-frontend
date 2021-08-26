@@ -66,7 +66,7 @@ const Horizontal: FC = () => {
             </div>
 
             <div className='stepper-item' data-kt-stepper-element='nav'>
-              <h3 className='stepper-title'>Account Info</h3>
+              <h3 className='stepper-title'>Customer Address</h3>
             </div>
 
             <div className='stepper-item' data-kt-stepper-element='nav'>

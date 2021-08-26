@@ -135,12 +135,57 @@ export function AsideMenuMain() {
      
       </AsideMenuItemWithSub>
       <AsideMenuItem
-      hasBullet={true}
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+
         to='/apps/Permissions'
         title='Permissions'
       />
-
-
+<div className='menu-item'>
+        <div className='menu-content pt-8 pb-2'>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Customers</span>
+        </div>
+      </div>
+   
+    <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+        to='/apps/customers/ViewCustomers'
+        title='View Customers'
+      />
+    
+      <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+             to='/apps/customers/AddCustomers'
+        title='Add Customers'
+      />
+      <AsideMenuItem
+            to='/crafted/pages/wizards/horizontal'
+            title='Horizontal'
+            hasBullet={true}
+          />
+<div className='menu-item'>
+        <div className='menu-content pt-8 pb-2'>
+          <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Carriers</span>
+        </div>
+      </div>
+   
+    <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+        to='/apps/viewCarriers'
+        title='View Carriers'
+      />
+    
+      <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+             to='/apps/bulkImport'
+        title='Bulk Import'
+      />
+      
+      {/* <AsideMenuItem
+        to='/builder'
+        icon='/media/icons/duotone/Interface/Settings-02.svg'
+        title='Report'
+        fontIcon='bi-layers'
+      /> */}
 
       {/* <AsideMenuItem to='/crafted/pages/profile/campaigns' title='Campaigns' hasBullet={true} />
           <AsideMenuItem to='/crafted/pages/profile/documents' title='Documents' hasBullet={true} /> */}

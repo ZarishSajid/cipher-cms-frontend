@@ -3,7 +3,9 @@ import * as Yup from 'yup'
 export interface ICreateAccount {
   accountType: string
   accountTeamSize: string
-  accountName: string
+  firstname: string
+  lastname:string
+  country:string
   accountPlan: string
   businessName: string
   businessDescriptor: string
@@ -23,7 +25,13 @@ const createAccountSchemas = [
     accountType: Yup.string().required().label('Account Type'),
   }),
   Yup.object({
-    accountName: Yup.string().required().label('Account Name'),
+    firstname: Yup.string().required().label('First Name'),
+  }),
+  Yup.object({
+    lastname: Yup.string().required().label('Last Name'),
+  }),
+  Yup.object({
+    country: Yup.string().required().label('country'),
   }),
   Yup.object({
     businessName: Yup.string().required().label('Business Name'),
@@ -43,7 +51,9 @@ const createAccountSchemas = [
 const inits: ICreateAccount = {
   accountType: 'personal',
   accountTeamSize: '50+',
-  accountName: '',
+  firstname: '',
+  lastname:'',
+  country:'',
   accountPlan: '1',
   businessName: 'Keenthemes Inc.',
   businessDescriptor: 'KEENTHEMES',
