@@ -6,6 +6,12 @@ export interface ICreateAccount {
   firstname: string
   lastname:string
   country:string
+  street1:string
+  street2:string
+  zip:string
+  city:string
+  state:string
+  telephone:''
   accountPlan: string
   businessName: string
   businessDescriptor: string
@@ -34,6 +40,12 @@ const createAccountSchemas = [
     country: Yup.string().required().label('country'),
   }),
   Yup.object({
+    street1: Yup.string().required().label('street1'),
+  }),
+  Yup.object({
+    street2: Yup.string().required().label('street2'),
+  }),
+  Yup.object({
     businessName: Yup.string().required().label('Business Name'),
     businessDescriptor: Yup.string().required().label('Shortened Descriptor'),
     businessType: Yup.string().required().label('Corporation Type'),
@@ -54,6 +66,12 @@ const inits: ICreateAccount = {
   firstname: '',
   lastname:'',
   country:'',
+  street1:'',
+  street2:'',
+  zip:'',
+  city:'',
+  state:'',
+  telephone:'',
   accountPlan: '1',
   businessName: 'Keenthemes Inc.',
   businessDescriptor: 'KEENTHEMES',
