@@ -5,7 +5,8 @@ import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import "../index.css"
-import { Link } from 'react-router-dom';
+import { Link ,useHistory} from 'react-router-dom';
+
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -17,6 +18,7 @@ class UsersList extends React.Component {
       street_2: '',
       usdot_no: '',
       mc_no: '',
+      mcInput:'',
       zip: '',
       city: '',
       state: '',
@@ -35,6 +37,7 @@ class UsersList extends React.Component {
       private_notes: '',
       value: 'mc',
       mcInput:'',
+      distance_unit:''
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -71,7 +74,7 @@ class UsersList extends React.Component {
     })
     console.log('Public Notes =', this.state.public_notes)
   }
-
+  
   handlePrivateNotes(e) {
     this.setState({
       private_notes: e.target.value,
@@ -79,15 +82,15 @@ class UsersList extends React.Component {
     console.log('Private Notes =', this.state.private_notes)
   }
   handleTemperatureUnit(event) {
-    this.setState({value: event.target.value})
+    this.setState({temperature_unit: event.target.value})
     console.log('Temperature Unit =', event.target.value)
   }
   handleWeightUnit(event) {
-    this.setState({value: event.target.value})
+    this.setState({weight_unit: event.target.value})
     console.log('Weight Unit =', event.target.value)
   }
   handleDistanceUnit(event) {
-    this.setState({value: event.target.value})
+    this.setState({distance_unit: event.target.value})
     console.log('Distance Unit =', event.target.value)
   }
 
@@ -99,7 +102,7 @@ class UsersList extends React.Component {
   }
 
   handleMcNumber(event) {
-    this.setState({value: event.target.value})
+    this.setState({mc_no: event.target.value})
     console.log('MCNumber Number =', event.target.value)
   }
 
@@ -219,21 +222,58 @@ class UsersList extends React.Component {
     console.log('Contact Fax=', this.state.contact_fax)
   }
 
-  saveContactList = (e) => {
+addContact(){
+  this.setState({
+    contact_name: '',
+    contact_email: '',
+    contact_telephone: '',
+    contact_fax: '',
+    contact_extension: '',
+  })
+  window.location.href="#kt_tab_pane_3"
+  
+
+}
+
+  saveAccountingDetail = (e) => {
+   var id= localStorage.getItem("id")
+   console.log(id,"id inside save accounting details")
     const data = {
-      contact_name: this.state.contact_name,
-      contact_email: this.state.contact_email,
-      contact_telephone: this.state.contact_telephone,
-      contact_fax: this.state.contact_fax,
-      contact_extension: this.state.contact_extension,
+      available_credit: this.state.available_credit,
+      credit_limit: this.state.credit_limit,
+      payment_terms: this.state.payment_terms,
+      credit_hold:this.state.credit_hold
     }
-    axios.post(`http://localhost:8080/addnewcustomer`, data).then((res) => {
+    axios.put(`http://localhost:8080/api/update_customer/${id}`, data).then((res) => {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
         alert('Customer Details Saved')
         console.log('data', res.data.message)
         localStorage.setItem('id', res.data)
+      } else {
+        alert(res.data.message)
+      }
+    })
+  }
+
+  saveContactList = (e) => {
+    var id= localStorage.getItem("id")
+    console.log(id,"id inside save accounting details")
+    const data = {
+      
+      contact_name: this.state.contact_name,
+      contact_email: this.state.contact_email,
+      contact_telephone: this.state.contact_telephone,
+      contact_fax: this.state.contact_fax,
+      contact_extension: this.state.contact_extension,
+    }
+    axios.post(`http://localhost:8080/api/add_customer_contact/${id}`, data).then((res) => {
+      console.log('RESPONSE = ', res)
+      console.log(res.message)
+      if (res.data.success) {
+        alert('Customer Details Saved')
+        console.log('data', res.data.message)
       } else {
         alert(res.data.message)
       }
@@ -257,18 +297,44 @@ class UsersList extends React.Component {
       mc_no:this.state.mc_no,
       mcInput:this.state.mcInput
     }
-    axios.post(`http://localhost:8080/addnewcustomer`, data).then((res) => {
+    
+    axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
         alert('Customer Details Saved')
         console.log('data', res.data.message)
-        localStorage.setItem('id', res.data)
+        localStorage.setItem('id', res.data.data._id)
+        window.location.href="#kt_tab_pane_2"
       } else {
         alert(res.data.message)
       }
     })
   }
+
+
+  saveCustomizeUnit = (e) => {
+    var id= localStorage.getItem("id")
+    console.log(id,"id inside save accounting details")
+     const data = {
+       public_notes:this.state.public_notes,
+       private_notes:this.state.private_notes,
+       weight_unit:this.state.weight_unit,
+       distance_unit:this.state.distance_unit,
+       temperature_unit:this.state.temperature_unit
+     }
+     axios.put(` http://localhost:8080/api/update_customer_unit/${id}`, data).then((res) => {
+       console.log('RESPONSE = ', res)
+       console.log(res.message)
+       if (res.data.success) {
+         alert('Customer Details Saved')
+         console.log('data', res.data.message)
+       } else {
+         alert(res.data.message)
+       }
+     })
+   }
+  
   render() {
     return (
       <div>
@@ -294,6 +360,7 @@ class UsersList extends React.Component {
             </a>
           </li>
         </ul>
+
         <div className='tab-content' id='myTabContent'>
           <div
             className=' card card-custom tab-pane fade active show'
@@ -472,7 +539,7 @@ class UsersList extends React.Component {
                         <div className='input-group-prepend'>
                           <select
                             onChange={this.handleMcNumber}
-                            value={this.state.value}
+                            value={this.state.mc_no}
                             name='mc_no'
                             className='form-select form-select-solid select2-hidden-accessible'
                             data-control='select2'
@@ -503,9 +570,8 @@ class UsersList extends React.Component {
                       <input
                         value={this.state.usdot_no}
                         onChange={this.handleUsDot}
-                        type='text'
-                        maxLength='7'
-                        className='form-control form-control-solid'
+                        type = "number"
+    maxlength = "7"                        className='form-control form-control-solid'
                         name='usdot'
                       />
                       <span
@@ -634,7 +700,7 @@ class UsersList extends React.Component {
                       <label className='form-label '>Credit Limit</label>
 
                       <input
-                        type='number'
+                        type='text'
                         value={this.state.credit_limit}
                         onChange={this.handleCreditLimit}
                         name='credit_limit'
@@ -647,6 +713,7 @@ class UsersList extends React.Component {
                       <label className='form-label '>Available Credit</label>
 
                       <input
+                      type="text"
                         value={this.state.availablecredit}
                         onChange={this.handleAvailableCredit}
                         name='available_credit'
@@ -660,7 +727,7 @@ class UsersList extends React.Component {
                   <label className='form-label '>Payment Terms</label>
                   <div className='input-group'>
                     <input
-                      type='number'
+                      type='text'
                       value={this.state.payment_terms}
                       onChange={this.handlePaymentTerms}
                       name='payment_terms'
@@ -739,7 +806,7 @@ class UsersList extends React.Component {
 
                   <div>
                     <button
-                      onClick={() => this.saveData()}
+                      onClick={() => this.saveAccountingDetail()}
                       type='button'
                       className='btn btn-lg btn-primary me-3 d-inline-block'
                       data-kt-stepper-action='submit'
@@ -803,40 +870,15 @@ class UsersList extends React.Component {
                 noValidate={true}
                 id='kt_create_account_form'
               >
-              <button component={Link} to="#kt_tab_pane_3"
-                          type='button'
-                          className='btn btn-primary add-contact'
-                        >
-                          <span className='svg-icon svg-icon-2'>
-                            <svg
-                              xmlns='http://www.w3.org/2000/svg'
-                              xmlnsXlink='http://www.w3.org/1999/xlink'
-                              width='24px'
-                              height='24px'
-                              viewBox='0 0 24 24'
-                              version='1.1'
-                            >
-                              <rect fill='#000000' x='4' y='11' width='16' height='2' rx='1'></rect>
-                              <rect
-                                fill='#000000'
-                                opacity='0.5'
-                                transform='translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)'
-                                x='4'
-                                y='11'
-                                width='16'
-                                height='2'
-                                rx='1'
-                              ></rect>
-                            </svg>
-                          </span>
-                          Add another contact
-                        </button>
+            
+                        <br/>
                 <div data-kt-stepper-element='content' className='completed'></div>
 
                 <div data-kt-stepper-element='content' className='completed'>
                   <div className='w-100' data-select2-id='select2-data-77-feqh'>
                   
                     <div className='pb-10 pb-lg-12'>
+                      <br/>
                       <h2 className='fw-bolder text-dark'>Customer Contact List</h2>
                       
                     </div>
@@ -893,9 +935,10 @@ class UsersList extends React.Component {
                     </div>
                     <br />
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label '>Email</label>
-
+                     <br/>
+                      <label className='form-label'>Email</label>
                       <input
+                      type="email"
                         value={this.state.contact_email}
                         onChange={this.handleEmail}
                         name='contact_email'
@@ -953,6 +996,8 @@ class UsersList extends React.Component {
                   </div>
 
                   <div>
+                   
+                    
                     <button
                       onClick={() => this.saveContactList()}
                       type='button'
@@ -961,6 +1006,17 @@ class UsersList extends React.Component {
                     >
                       <span className='indicator-label'>
                         Save
+                        <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
+                      </span>
+                    </button>
+                    <button
+                      onClick={() => this.addContact()}
+                      type='button'
+                      className='btn btn-lg btn-primary me-3 d-inline-block'
+                      data-kt-stepper-action='submit'
+                    >
+                      <span className='indicator-label'>
+                        Add New contact
                         <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
                       </span>
                     </button>
@@ -1035,8 +1091,9 @@ class UsersList extends React.Component {
                       <label className=' fs-6 fw-bold form-label mb-2'>Weight Unit</label>
 
                       <select
+                      type="text"
                         onChange={this.handleWeightUnit}
-                        value={this.state.value}
+                        value={this.state.weight_unit}
                         name='weight_unit'
                         className='form-select form-select-solid select2-hidden-accessible'
                         data-control='select2'
@@ -1059,8 +1116,9 @@ class UsersList extends React.Component {
                       <label className=' fs-6 fw-bold form-label mb-2'>Distance Unit</label>
 
                       <select
+                      type="text"
                         onChange={this.handleDistanceUnit}
-                        value={this.state.value}
+                        value={this.state.distance_unit}
                         name='distance_unit'
                         className='form-select form-select-solid select2-hidden-accessible'
                         data-control='select2'
@@ -1083,8 +1141,9 @@ class UsersList extends React.Component {
                       <label className=' fs-6 fw-bold form-label mb-2'>Temperature Unit</label>
 
                       <select
+                      type="text"
                         onChange={this.handleTemperatureUnit}
-                        value={this.state.value}
+                        value={this.state.temperature_unit}
                         name='temperature_unit'
                         className='form-select form-select-solid select2-hidden-accessible'
                         data-control='select2'
@@ -1107,6 +1166,7 @@ class UsersList extends React.Component {
                       <label className='form-label'>Private Notes</label>
 
                       <textarea
+                      type="text"
                         value={this.state.private_notes}
                         onChange={this.handlePrivateNotes}
                         name='private_notes'
@@ -1124,6 +1184,7 @@ class UsersList extends React.Component {
                       <label className='form-label'>Public Notes</label>
 
                       <textarea
+                      type="text"
                         value={this.state.public_notes}
                         onChange={this.handlePublicNotes}
                         name='public_notes'
@@ -1177,7 +1238,7 @@ class UsersList extends React.Component {
 
                   <div>
                     <button
-                      onClick={() => this.saveData()}
+                      onClick={() => this.saveCustomizeUnit()}
                       type='button'
                       className='btn btn-lg btn-primary me-3 d-inline-block'
                       data-kt-stepper-action='submit'

@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import {PageTitle} from '../../../../_metronic/layout/core'
 import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import axios from 'axios'
+import "../index.css"
+import { BsTrash} from "react-icons/bs";
+
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -12,6 +15,16 @@ class UsersList extends React.Component {
       value: '',
       name: '',
       image: null,
+      firstname:'',
+      lastname:'',
+      country:'',
+      city:'',
+      state:'',
+      usdot_no:'',
+      docket_number:'',
+      available_credit:'',
+      data:[],
+      isLoading:true ,
     }
     this.handleUsername = this.handleUsername.bind(this)
     this.handleEmail = this.handleEmail.bind(this)
@@ -19,6 +32,47 @@ class UsersList extends React.Component {
     this.onValueChange = this.onValueChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
   }
+
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+
+  fetchData() {
+    this.setState({ loading: true });
+   
+  
+   
+    const data = {
+      firstname:this.state.firstname,
+      lastname:this.state.lastname,
+      country:this.state.country,
+      city:this.state.city,
+      state:this.state.state,
+      usdot_no:this.state.usdot_no,
+      docket_number:this.state.docket_number,
+      available_credit:this.state.available_credit
+    
+      
+    };
+    axios.get(`http://localhost:8080/api/get_customer_list`,data)
+  
+    .then((res) => {
+
+      console.log("RESPONSE = ", res.data.data);
+    this.setState({ isLoading:false,data:res.data.data });
+    console.log("view customer data",this.state.data);
+  
+  
+      console.log(res.message);
+     
+    });
+  }
+  
+  
+
+
   handleChange(event) {
     this.setState({
       image: URL.createObjectURL(event.target.files[0]),
@@ -69,8 +123,26 @@ class UsersList extends React.Component {
     })
     console.log('email =', this.state.email)
   }
+  deleteCustomer(e, id) {
+    e.preventDefault();
+    console.log("id inside delete customer");
+    axios
+      .delete(`http://localhost:8080/api/delete_one_customer/${id}`)
 
+      .then((res) => {
+        console.log("RESPONSE = ", res._id);
+        alert("Sucesfully Deleted");
+        if (res.data.success === true) {
+          window.location.reload(false);
+
+        }
+        console.log(res.message);
+      });
+  }
+  
   render() {
+    const {data} =this.state;
+
     const {open, openActive} = this.state
 
     return (
@@ -922,38 +994,74 @@ class UsersList extends React.Component {
                       <table className="table table-row-dashed table-row-gray-300 gy-7">
       <thead>
           <tr className="fw-bolder fs-6 text-gray-800">
-              <th>Name</th>
-              <th>Address</th>
-              <th>MC Number</th>
+              <th>First Name</th>
+              <th>Last Name</th>
+              <th>Country</th>
+              <th>City</th>
+              <th>State</th>
               <th>USDOT Number</th>
+              <th>Docket Number</th>
               <th>Available Credit</th>
-              <th>Primary Contact</th>
-              <th>Primary Phone</th>
+              <th>Actions</th>
 
           </tr>
       </thead>
       <tbody>
-          <tr>
-              <td>Tiger Nixon</td>
-              <td>System Architect</td>
-              <td>Edinburgh</td>
-              <td>61</td>
-              <td>2011/04/25</td>
-              <td>$320,800</td>
-              <td>$320,800</td>
+            {data.map((values,index)=>{
+              return(
+          <tr  key={index}>
+              <td>{values.firstname}</td>
+              <td>{values.lastname}</td>
+              <td>{values.country}</td>
+              <td>{values.city}</td>
+              <td>{values.state}</td>
+              <td>{values.usdot_no}</td>
+              <td>{values.docket_number}</td>
+              <td>{values.available_credit}</td>
+              <td className="text-end">
+  <button
+    className="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+    data-bs-toggle="modal"
+    data-bs-target="#kt_modal_update_permission"
+  >
+    <span class="svg-icon svg-icon-3">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        
+      >
+        <path
+          d="M17.5 11H6.5C4 11 2 9 2 6.5C2 4 4 2 6.5 2H17.5C20 2 22 4 22 6.5C22 9 20 11 17.5 11ZM15 6.5C15 7.9 16.1 9 17.5 9C18.9 9 20 7.9 20 6.5C20 5.1 18.9 4 17.5 4C16.1 4 15 5.1 15 6.5Z"
+          fill="black"
+        ></path>
+        <path
+          opacity="0.3"
+          d="M17.5 22H6.5C4 22 2 20 2 17.5C2 15 4 13 6.5 13H17.5C20 13 22 15 22 17.5C22 20 20 22 17.5 22ZM4 17.5C4 18.9 5.1 20 6.5 20C7.9 20 9 18.9 9 17.5C9 16.1 7.9 15 6.5 15C5.1 15 4 16.1 4 17.5Z"
+          fill="black"
+        ></path>
+      </svg>
+    </span>
+  </button>
+  <button
+   onClick={(e) => this.deleteCustomer(e, values._id)}
+    className="btn btn-icon btn-active-light-primary w-30px h-30px"
+    data-kt-permissions-table-filter="delete_row"
+  >
+    <span >
+     <BsTrash className="delete-icon"
+/>
+    </span>
+  </button>
+  {" "}
+</td>
 
           </tr>
-          <tr>
-              <td>Garrett Winters</td>
-              <td>Accountant</td>
-              <td>Tokyo</td>
-              <td>63</td>
-              <td>2011/07/25</td>
-              <td>$170,750</td>
-                            <td>$320,800</td>
-
-          </tr>
+            )
+          })}
       </tbody>
+      
   </table>
 </div>
 
