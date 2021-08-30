@@ -4,8 +4,8 @@ import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
-import "../index.css"
-import { Link ,useHistory} from 'react-router-dom';
+import '../index.css'
+import {Link, useHistory} from 'react-router-dom'
 
 class UsersList extends React.Component {
   constructor(props) {
@@ -18,8 +18,8 @@ class UsersList extends React.Component {
       street_2: '',
       usdot_no: '',
       mc_no: '',
-      mcInput:'',
-      zip: '',
+      mcInput: '',
+      postal_code: '',
       city: '',
       state: '',
       telephone: '',
@@ -36,8 +36,13 @@ class UsersList extends React.Component {
       public_notes: '',
       private_notes: '',
       value: 'mc',
-      mcInput:'',
-      distance_unit:''
+      mcInput: '',
+      distance_unit: '',
+      place_name:'',
+      stateList:[],
+      City:[],
+      fireRedirect: false,
+      redirectRoute: "",
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -47,7 +52,7 @@ class UsersList extends React.Component {
     this.handleStreet2 = this.handleStreet2.bind(this)
     this.handleMcNumber = this.handleMcNumber.bind(this)
     this.handleUsDot = this.handleUsDot.bind(this)
-    this.handleZip = this.handleZip.bind(this)
+    this.handlePostalCode = this.handlePostalCode.bind(this)
     this.handleCity = this.handleCity.bind(this)
     this.handleState = this.handleState.bind(this)
     this.handleTelephone = this.handleTelephone.bind(this)
@@ -65,7 +70,7 @@ class UsersList extends React.Component {
     this.handleTemperatureUnit = this.handleTemperatureUnit.bind(this)
     this.handlePublicNotes = this.handlePublicNotes.bind(this)
     this.handlePrivateNotes = this.handlePrivateNotes.bind(this)
-    this.handleMcInput=this.handleMcInput.bind(this)
+    this.handleMcInput = this.handleMcInput.bind(this)
   }
 
   handlePublicNotes(e) {
@@ -74,7 +79,7 @@ class UsersList extends React.Component {
     })
     console.log('Public Notes =', this.state.public_notes)
   }
-  
+
   handlePrivateNotes(e) {
     this.setState({
       private_notes: e.target.value,
@@ -105,7 +110,6 @@ class UsersList extends React.Component {
     this.setState({mc_no: event.target.value})
     console.log('MCNumber Number =', event.target.value)
   }
-
 
   handleMcInput(event) {
     this.setState({mcInput: event.target.value})
@@ -173,23 +177,53 @@ class UsersList extends React.Component {
     console.log('USDOT Number =', this.state.usdot_no)
   }
 
-  handleZip(e) {
-    this.setState({
-      zip: e.target.value,
-    })
-    console.log('Zip=', this.state.zip)
+  handlePostalCode(event) {
+    console.log('Value from postal code:', event.target.value)
+
+    this.setState(
+      {
+        postal_code: event.target.value,
+      },
+      () => {
+        console.log('Complete value', this.state.postal_code)
+
+        // geoname api start
+
+        const data = {
+          postal_code: this.state.postal_code,
+        }
+        console.log('dataa', data)
+        axios
+          .post(`http://localhost:8080/api/get_city_state`, data)
+
+          .then((res) => {
+            //  console.log('RESPONSE = ', res.data.data)
+            // console.log('City Name = ', res.data.data)
+            // console.log('State Name = ', res.data.state_name)
+            this.setState({ isLoading:false,stateList:res.data.data});
+             console.log("view state list",this.state.stateList);
+          
+            // this.setState({ City:res.data.data});
+            // console.log("City ",this.state.City);
+
+
+
+            // console.log(res.message)
+          })
+      }
+    )
+
+    // geonames api calling
   }
   handleCity(e) {
     this.setState({
       city: e.target.value,
     })
-    console.log('City =', this.state.city)
+    console.log('City =', e.target.value)
   }
-  handleState(e) {
-    this.setState({
-      state: e.target.value,
-    })
-    console.log('State =', this.state.state)
+  handleState(event) {
+    this.setState({state: event.target.value})
+    console.log('State Name =', event.target.value)
   }
   handleTelephone(e) {
     this.setState({
@@ -222,27 +256,25 @@ class UsersList extends React.Component {
     console.log('Contact Fax=', this.state.contact_fax)
   }
 
-addContact(){
-  this.setState({
-    contact_name: '',
-    contact_email: '',
-    contact_telephone: '',
-    contact_fax: '',
-    contact_extension: '',
-  })
-  window.location.href="#kt_tab_pane_3"
-  
-
-}
+  addContact() {
+    this.setState({
+      contact_name: '',
+      contact_email: '',
+      contact_telephone: '',
+      contact_fax: '',
+      contact_extension: '',
+    })
+    window.location.href = '#kt_tab_pane_3'
+  }
 
   saveAccountingDetail = (e) => {
-   var id= localStorage.getItem("id")
-   console.log(id,"id inside save accounting details")
+    var id = localStorage.getItem('id')
+    console.log(id, 'id inside save accounting details')
     const data = {
       available_credit: this.state.available_credit,
       credit_limit: this.state.credit_limit,
       payment_terms: this.state.payment_terms,
-      credit_hold:this.state.credit_hold
+      credit_hold: this.state.credit_hold,
     }
     axios.put(`http://localhost:8080/api/update_customer/${id}`, data).then((res) => {
       console.log('RESPONSE = ', res)
@@ -250,7 +282,9 @@ addContact(){
       if (res.data.success) {
         alert('Customer Details Saved')
         console.log('data', res.data.message)
-        localStorage.setItem('id', res.data)
+        window.location.href = '#kt_tab_pane_3'
+
+        // localStorage.setItem('id', res.data)
       } else {
         alert(res.data.message)
       }
@@ -258,10 +292,9 @@ addContact(){
   }
 
   saveContactList = (e) => {
-    var id= localStorage.getItem("id")
-    console.log(id,"id inside save accounting details")
+    var id = localStorage.getItem('id')
+    console.log(id, 'id inside save accounting details')
     const data = {
-      
       contact_name: this.state.contact_name,
       contact_email: this.state.contact_email,
       contact_telephone: this.state.contact_telephone,
@@ -274,30 +307,28 @@ addContact(){
       if (res.data.success) {
         alert('Customer Details Saved')
         console.log('data', res.data.message)
+
       } else {
         alert(res.data.message)
       }
     })
   }
   saveData = (e) => {
-
-   
-
     const data = {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
       city: this.state.city,
       street_1: this.state.street_1,
       street_2: this.state.street_2,
-      zip: this.state.zip,
+      postal_code: this.state.postal_code,
       state: this.state.state,
       country: this.state.country,
       telephone: this.state.telephone,
       usdot_no: this.state.usdot_no,
-      mc_no:this.state.mc_no,
-      mcInput:this.state.mcInput
+      mc_no: this.state.mc_no,
+      mcInput: this.state.mcInput,
     }
-    
+
     axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
       console.log('RESPONSE = ', res)
       console.log(res.message)
@@ -305,37 +336,40 @@ addContact(){
         alert('Customer Details Saved')
         console.log('data', res.data.message)
         localStorage.setItem('id', res.data.data._id)
-        window.location.href="#kt_tab_pane_2"
+        window.location.href = '#kt_tab_pane_2'
       } else {
         alert(res.data.message)
       }
     })
   }
 
-
   saveCustomizeUnit = (e) => {
-    var id= localStorage.getItem("id")
-    console.log(id,"id inside save accounting details")
-     const data = {
-       public_notes:this.state.public_notes,
-       private_notes:this.state.private_notes,
-       weight_unit:this.state.weight_unit,
-       distance_unit:this.state.distance_unit,
-       temperature_unit:this.state.temperature_unit
-     }
-     axios.put(` http://localhost:8080/api/update_customer_unit/${id}`, data).then((res) => {
-       console.log('RESPONSE = ', res)
-       console.log(res.message)
-       if (res.data.success) {
-         alert('Customer Details Saved')
-         console.log('data', res.data.message)
-       } else {
-         alert(res.data.message)
-       }
-     })
-   }
-  
+    var id = localStorage.getItem('id')
+    console.log(id, 'id inside save accounting details')
+    const data = {
+      public_notes: this.state.public_notes,
+      private_notes: this.state.private_notes,
+      weight_unit: this.state.weight_unit,
+      distance_unit: this.state.distance_unit,
+      temperature_unit: this.state.temperature_unit,
+    }
+    axios.put(` http://localhost:8080/api/update_customer_unit/${id}`, data).then((res) => {
+      console.log('RESPONSE = ', res)
+      console.log(res.message)
+      if (res.data.success) {
+        alert('Customer Details Saved')
+        window.location.href = '#kt_tab_pane_1'
+
+        console.log('data', res.data.message)
+      } else {
+        alert(res.data.message)
+      }
+    })
+  }
+
   render() {
+    
+const {stateList}=this.state
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
@@ -434,60 +468,68 @@ addContact(){
                       <div className='col-md-8 fv-row'>
                         <div className='row fv-row fv-plugins-icon-container'>
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2'>Zip</label>
+                            <label className=' fs-6 fw-bold form-label mb-2'>Postal Code</label>
 
                             <input
-                              value={this.state.zip}
-                              onChange={this.handleZip}
+                              value={this.state.postal_code}
+                              onChange={this.handlePostalCode}
                               type='text'
                               className='form-control form-control-solid'
-                              name='zip'
+                              name='postal_code'
                             />
                             <div className='fv-plugins-message-container invalid-feedback'></div>
                           </div>
 
                           <div className='col-6'>
-                            <label className='fs-6 fw-bold form-label mb-2'>City</label>
+                          <label className=' fs-6 fw-bold form-label mb-2'>City</label>
 
-                            <input
-                              type='text'
-                              className='form-control form-control-solid'
-                              name='city'
-                              value={this.state.city}
-                              onChange={this.handleCity}
-                            />
-                            <span
-                              className='select2 select2-container select2-container--bootstrap5'
-                              dir='ltr'
-                              data-select2-id='select2-data-17-0og1'
-                              style={{width: '100%'}}
-                            >
-                              <span className='dropdown-wrapper' aria-hidden='true'></span>
-                            </span>
-                            <div className='fv-plugins-message-container invalid-feedback'></div>
-                          </div>
+
+                      <select
+                        type='text'
+                        onChange={this.handleCity}
+                        value={this.state.city}
+                        name='city'
+                        className='form-select form-select-solid select2-hidden-accessible'
+                        data-control='select2'
+                        data-hide-search='true'
+                        data-select2-id='select2-data-13-fi4w'
+                        tabIndex={-1}
+                        aria-hidden='true'
+                      >
+                          {stateList.map((list) => (
+              <option value={list.admin_name1}>{list.admin_name1}</option>
+            ))}
+           
+                      
+                      </select>
+                      <div className='fv-plugins-message-container invalid-feedback'></div>
+                    </div>
                         </div>
                       </div>
 
-                      <div className='col-md-4 fv-row fv-plugins-icon-container'>
-                        <label className='d-flex align-items-center fs-6 fw-bold form-label mb-2'>
-                          <span>State</span>
-                        </label>
-                        <div className='position-relative'>
-                          <input
-                            value={this.state.state}
-                            onChange={this.handleState}
-                            type='text'
-                            className='form-control form-control-solid'
-                            name='state'
-                          />
-                          <div className='position-absolute translate-middle-y top-50 end-0 me-3'>
-                            <span className='svg-icon svg-icon-2hx'></span>
-                          </div>
-                        </div>
-                        <br />
-                        <div className='fv-plugins-message-container invalid-feedback'></div>
-                      </div>
+                      <div className='col-4'>
+                          <label className=' fs-6 fw-bold form-label mb-2'>State</label>
+
+
+                      <select
+                        type='text'
+                        onChange={this.handleState}
+                        value={this.state.state}
+                        name='state'
+                        className='form-select form-select-solid select2-hidden-accessible'
+                        data-control='select2'
+                        data-hide-search='true'
+                        data-select2-id='select2-data-13-fi4w'
+                        tabIndex={-1}
+                        aria-hidden='true'
+                      > 
+                     {stateList.map((list) => (
+              <option value={list.place_name}>{list.place_name}</option>
+            ))}
+                      
+                      </select>
+                      <div className='fv-plugins-message-container invalid-feedback'></div>
+                    </div>
                     </div>
 
                     <div className='col-md-12 fv-row'>
@@ -570,8 +612,9 @@ addContact(){
                       <input
                         value={this.state.usdot_no}
                         onChange={this.handleUsDot}
-                        type = "number"
-    maxlength = "7"                        className='form-control form-control-solid'
+                        type='number'
+                        maxlength='7'
+                        className='form-control form-control-solid'
                         name='usdot'
                       />
                       <span
@@ -713,7 +756,7 @@ addContact(){
                       <label className='form-label '>Available Credit</label>
 
                       <input
-                      type="text"
+                        type='text'
                         value={this.state.availablecredit}
                         onChange={this.handleAvailableCredit}
                         name='available_credit'
@@ -870,19 +913,15 @@ addContact(){
                 noValidate={true}
                 id='kt_create_account_form'
               >
-            
-                        <br/>
+                <br />
                 <div data-kt-stepper-element='content' className='completed'></div>
 
                 <div data-kt-stepper-element='content' className='completed'>
                   <div className='w-100' data-select2-id='select2-data-77-feqh'>
-                  
                     <div className='pb-10 pb-lg-12'>
-                      <br/>
+                      <br />
                       <h2 className='fw-bolder text-dark'>Customer Contact List</h2>
-                      
                     </div>
-
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                       <label className='form-label '>Name</label>
@@ -935,10 +974,10 @@ addContact(){
                     </div>
                     <br />
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                     <br/>
+                      <br />
                       <label className='form-label'>Email</label>
                       <input
-                      type="email"
+                        type='email'
                         value={this.state.contact_email}
                         onChange={this.handleEmail}
                         name='contact_email'
@@ -996,8 +1035,6 @@ addContact(){
                   </div>
 
                   <div>
-                   
-                    
                     <button
                       onClick={() => this.saveContactList()}
                       type='button'
@@ -1091,7 +1128,7 @@ addContact(){
                       <label className=' fs-6 fw-bold form-label mb-2'>Weight Unit</label>
 
                       <select
-                      type="text"
+                        type='text'
                         onChange={this.handleWeightUnit}
                         value={this.state.weight_unit}
                         name='weight_unit'
@@ -1116,7 +1153,7 @@ addContact(){
                       <label className=' fs-6 fw-bold form-label mb-2'>Distance Unit</label>
 
                       <select
-                      type="text"
+                        type='text'
                         onChange={this.handleDistanceUnit}
                         value={this.state.distance_unit}
                         name='distance_unit'
@@ -1141,7 +1178,7 @@ addContact(){
                       <label className=' fs-6 fw-bold form-label mb-2'>Temperature Unit</label>
 
                       <select
-                      type="text"
+                        type='text'
                         onChange={this.handleTemperatureUnit}
                         value={this.state.temperature_unit}
                         name='temperature_unit'
@@ -1166,7 +1203,7 @@ addContact(){
                       <label className='form-label'>Private Notes</label>
 
                       <textarea
-                      type="text"
+                        type='text'
                         value={this.state.private_notes}
                         onChange={this.handlePrivateNotes}
                         name='private_notes'
@@ -1184,7 +1221,7 @@ addContact(){
                       <label className='form-label'>Public Notes</label>
 
                       <textarea
-                      type="text"
+                        type='text'
                         value={this.state.public_notes}
                         onChange={this.handlePublicNotes}
                         name='public_notes'

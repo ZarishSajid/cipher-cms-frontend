@@ -115,7 +115,6 @@ export function AsideMenuMain() {
      
       </AsideMenuItemWithSub>
 
-
        <AsideMenuItemWithSub
         to='/apps/user-management'
         title='Roles'
@@ -157,11 +156,16 @@ export function AsideMenuMain() {
              to='/apps/customers/AddCustomers'
         title='Add Customers'
       />
-      <AsideMenuItem
-            to='/crafted/pages/wizards/horizontal'
-            title='Horizontal'
-            hasBullet={true}
-          />
+       <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+             to='/apps/customers/ShipperDirectory'
+        title='Shipper Directory'
+      />
+        <AsideMenuItem
+             icon='/media/icons/duotone/Communication/Group-chat.svg'
+             to='/apps/customers/BulkImport'
+        title='Bulk Import'
+      />
 <div className='menu-item'>
         <div className='menu-content pt-8 pb-2'>
           <span className='menu-section text-muted text-uppercase fs-8 ls-1'>Carriers</span>

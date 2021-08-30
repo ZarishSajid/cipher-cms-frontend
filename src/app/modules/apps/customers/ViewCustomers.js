@@ -4,17 +4,15 @@ import {toAbsoluteUrl} from '../../../../_metronic/helpers'
 import axios from 'axios'
 import "../index.css"
 import { BsTrash} from "react-icons/bs";
+import { NavLink } from "react-router-dom";
 
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      username: '',
-      email: '',
-      role: '',
+     
       value: '',
       name: '',
-      image: null,
       firstname:'',
       lastname:'',
       country:'',
@@ -26,11 +24,7 @@ class UsersList extends React.Component {
       data:[],
       isLoading:true ,
     }
-    this.handleUsername = this.handleUsername.bind(this)
-    this.handleEmail = this.handleEmail.bind(this)
-    this.handleSubmit = this.handleSubmit.bind(this)
-    this.onValueChange = this.onValueChange.bind(this)
-    this.handleChange = this.handleChange.bind(this)
+   
   }
 
 
@@ -72,19 +66,6 @@ class UsersList extends React.Component {
   
   
 
-
-  handleChange(event) {
-    this.setState({
-      image: URL.createObjectURL(event.target.files[0]),
-    })
-    console.log('Image', event.target.value)
-  }
-  handleBack = () => {
-    this.setState({
-      //openActive: !this.state.openActive,
-      open: !this.state.open,
-    })
-  }
   handleSubmit(e) {
     e.preventDefault()
     const data = {
@@ -133,8 +114,7 @@ class UsersList extends React.Component {
         console.log("RESPONSE = ", res._id);
         alert("Sucesfully Deleted");
         if (res.data.success === true) {
-          window.location.reload(false);
-
+          window.location.href = '/apps/customers/ViewCustomers'
         }
         console.log(res.message);
       });
@@ -532,12 +512,15 @@ class UsersList extends React.Component {
                             </div>
                           </div>
                         </div>
-
+                        <NavLink
+              to={{
+                pathname: "/apps/customers/AddCustomers",
+              }}
+            >
                         <button
+                        
                           type='button'
                           className='btn btn-primary'
-                          data-bs-toggle='modal'
-                          data-bs-target='#kt_modal_add_user'
                         >
                           <span className='svg-icon svg-icon-2'>
                             <svg
@@ -563,6 +546,7 @@ class UsersList extends React.Component {
                           </span>
                           Add New Customer
                         </button>
+                        </NavLink>
                       </div>
                     </div>
                   </div>
@@ -789,199 +773,7 @@ class UsersList extends React.Component {
                     tabIndex={-1}
                     aria-hidden='true'
                   >
-                    <div className='modal-dialog modal-dialog-centered mw-650px'>
-                      <div className='modal-content'>
-                        <div className='modal-header' id='kt_modal_add_user_header'>
-                          <h2 className='fw-bolder'>Add User</h2>
-
-                          <div
-                            className='btn btn-icon btn-sm btn-active-icon-primary'
-                            data-kt-users-modal-action='close'
-                          >
-                            <span className='svg-icon svg-icon-1'>
-                              <svg
-                                xmlns='http://www.w3.org/2000/svg'
-                                xmlnsXlink='http://www.w3.org/1999/xlink'
-                                width='24px'
-                                height='24px'
-                                viewBox='0 0 24 24'
-                                version='1.1'
-                              >
-                                <g
-                                  transform='translate(12.000000, 12.000000) rotate(-45.000000) translate(-12.000000, -12.000000) translate(4.000000, 4.000000)'
-                                  fill='#000000'
-                                >
-                                  <rect
-                                    fill='#000000'
-                                    x='0'
-                                    y='7'
-                                    width='16'
-                                    height='2'
-                                    rx='1'
-                                  ></rect>
-                                  <rect
-                                    fill='#000000'
-                                    opacity='0.5'
-                                    transform='translate(8.000000, 8.000000) rotate(-270.000000) translate(-8.000000, -8.000000)'
-                                    x='0'
-                                    y='7'
-                                    width='16'
-                                    height='2'
-                                    rx='1'
-                                  ></rect>
-                                </g>
-                              </svg>
-                            </span>
-                          </div>
-                        </div>
-                        <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>
-                          <form
-                            id='kt_modal_add_user_form'
-                            className='form fv-plugins-bootstrap5 fv-plugins-framework'
-                            action='#'
-                          >
-                            <div
-                              className='d-flex flex-column scroll-y me-n7 pe-7'
-                              id='kt_modal_add_user_scroll'
-                              data-kt-scroll='true'
-                              data-kt-scroll-activate='{default: false, lg: true}'
-                              data-kt-scroll-max-height='auto'
-                              data-kt-scroll-dependencies='#kt_modal_add_user_header'
-                              data-kt-scroll-wrappers='#kt_modal_add_user_scroll'
-                              data-kt-scroll-offset='300px'
-                              style={{maxHeight: '83px'}}
-                            >
-                              <div className='fv-row mb-7'>
-                                <label className='d-block fw-bold fs-6 mb-5'>Avatar</label>
-                                <img width='100px' height='100px' src={this.state.image} />
-                                <br />
-                                <br />
-
-                                <input type='file' onChange={this.handleChange} />
-
-                                <div className='form-text'>Allowed file types: png, jpg, jpeg.</div>
-                              </div>
-
-                              <div className='fv-row mb-7 fv-plugins-icon-container'>
-                                <label className='required fw-bold fs-6 mb-2'>Full Name</label>
-
-                                <input
-                                  type='text'
-                                  name='username'
-                                  className='form-control form-control-solid mb-3 mb-lg-0'
-                                  placeholder='Full name'
-                                  value={this.state.username}
-                                  onChange={this.handleUsername}
-                                />
-                                <div className='fv-plugins-message-container invalid-feedback'></div>
-                              </div>
-
-                              <div className='fv-row mb-7 fv-plugins-icon-container'>
-                                <label className='required fw-bold fs-6 mb-2'>Email</label>
-
-                                <input
-                                  type='email'
-                                  name='email'
-                                  className='form-control form-control-solid mb-3 mb-lg-0'
-                                  placeholder='example@domain.com'
-                                  value={this.state.email}
-                                  onChange={this.handleEmail}
-                                />
-                                <div className='fv-plugins-message-container invalid-feedback'></div>
-                              </div>
-
-                              <div className='mb-7'>
-                                <label className='required fw-bold fs-6 mb-5'>Role</label>
-                              </div>
-                              <div className='d-flex fv-row'>
-                                <div className='radio'>
-                                  <input
-                                    className='form-check-input me-3'
-                                    type='radio'
-                                    value='Administrator'
-                                    checked={this.state.role === 'Administrator'}
-                                    onChange={this.onValueChange}
-                                  />
-                                  <label>Administrator</label>
-                                </div>
-                              </div>
-                              <div className='separator separator-dashed my-5'></div>
-
-                              <div className='radio'>
-                                <input
-                                  className='form-check-input me-3'
-                                  type='radio'
-                                  value='Developer'
-                                  checked={this.state.role === 'Developer'}
-                                  onChange={this.onValueChange}
-                                />
-                                <label className=' mx-auto'>Developer</label>
-                              </div>
-                              <div className='separator separator-dashed my-5'></div>
-
-                              <div className='radio'>
-                                <input
-                                  className='form-check-input me-3'
-                                  type='radio'
-                                  value='Analyst'
-                                  checked={this.state.role === 'Analyst'}
-                                  onChange={this.onValueChange}
-                                />
-                                <label className=' mx-auto'>Analyst</label>
-                              </div>
-                              <div className='separator separator-dashed my-5'></div>
-
-                              <div className='radio'>
-                                <input
-                                  className='form-check-input me-3'
-                                  type='radio'
-                                  value='Support'
-                                  checked={this.state.role === 'Support'}
-                                  onChange={this.onValueChange}
-                                />
-                                <label className=' mx-auto'>Support</label>
-                              </div>
-                              <div className='separator separator-dashed my-5'></div>
-
-                              <div className='radio'>
-                                <input
-                                  className='form-check-input me-3'
-                                  type='radio'
-                                  value='Trial'
-                                  checked={this.state.role === 'Trial'}
-                                  onChange={this.onValueChange}
-                                />
-                                <label className=' mx-auto'>Trial</label>
-                              </div>
-                            </div>
-
-                            <div className='text-center pt-15'>
-                              <button
-                                onClick={this.handleBack}
-                                type='reset'
-                                className='btn btn-light me-3'
-                                data-kt-users-modal-action='cancel'
-                              >
-                                Discard
-                              </button>
-                              <button
-                                onClick={this.handleSubmit}
-                                type='submit'
-                                className='btn btn-primary'
-                                data-kt-users-modal-action='submit'
-                              >
-                                <span className='indicator-label'>Submit</span>
-                                <span className='indicator-progress'>
-                                  Please wait...
-                                  <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
-                                </span>
-                              </button>
-                            </div>
-                            <div></div>
-                          </form>
-                        </div>
-                      </div>
-                    </div>
+                    
                   </div>
                 </div>
 
@@ -1019,7 +811,7 @@ class UsersList extends React.Component {
               <td>{values.docket_number}</td>
               <td>{values.available_credit}</td>
               <td className="text-end">
-  <button
+  {/* <button
     className="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
     data-bs-toggle="modal"
     data-bs-target="#kt_modal_update_permission"
@@ -1043,7 +835,7 @@ class UsersList extends React.Component {
         ></path>
       </svg>
     </span>
-  </button>
+  </button> */}
   <button
    onClick={(e) => this.deleteCustomer(e, values._id)}
     className="btn btn-icon btn-active-light-primary w-30px h-30px"
@@ -1093,7 +885,7 @@ class UsersList extends React.Component {
                                 href='#'
                                 aria-controls='kt_table_users'
                                 data-dt-idx='1'
-                                tabIndex={0}
+                                tabIndex={1}
                                 className='page-link'
                               >
                                 1
@@ -1104,7 +896,7 @@ class UsersList extends React.Component {
                                 href='#'
                                 aria-controls='kt_table_users'
                                 data-dt-idx='2'
-                                tabIndex={0}
+                                tabIndex={2}
                                 className='page-link'
                               >
                                 2
@@ -1115,7 +907,7 @@ class UsersList extends React.Component {
                                 href='#'
                                 aria-controls='kt_table_users'
                                 data-dt-idx='3'
-                                tabIndex={0}
+                                tabIndex={3}
                                 className='page-link'
                               >
                                 3
@@ -1126,7 +918,7 @@ class UsersList extends React.Component {
                                 href='#'
                                 aria-controls='kt_table_users'
                                 data-dt-idx='4'
-                                tabIndex={0}
+                                tabIndex={4}
                                 className='page-link'
                               >
                                 <i className='next'></i>
