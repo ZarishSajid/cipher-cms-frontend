@@ -5,8 +5,9 @@ import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
-import {Link } from 'react-router-dom'
-class UsersList extends React.Component {
+import {Link} from 'react-router-dom'
+import SweetAlert from 'react-bootstrap-sweetalert';
+class UpdateCustomers extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -246,10 +247,15 @@ class UsersList extends React.Component {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-      
+        <SweetAlert
+          success
+          title='Customer Details Saved'
+          onConfirm={this.onConfirm}
+          onCancel={this.onCancel}
+        />
         console.log('data', res.data.message)
         localStorage.setItem('id', res.data.data._id)
-        window.location.href = '/apps/customers/Accounting'
+        window.location.href = '/apps/customers/UpdateAccounting'
       } else {
         alert(res.data.message)
       }
@@ -263,7 +269,7 @@ class UsersList extends React.Component {
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link active'>
-              <Link to='/apps/customers/AddCustomers'>
+              <Link to='/apps/customers/UpdateCustomers'>
                 {' '}
                 <h6 className='text-primary'> Customer Details</h6>
               </Link>
@@ -271,21 +277,21 @@ class UsersList extends React.Component {
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/Accounting'>
+              <Link to='/apps/customers/UpdateAccounting'>
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/CustomerContact'>
+              <Link to='/apps/customers/UpdateCustomerContact'>
                 <h6 className='text-primary'> Contact Contact Details</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/CustomizeUnit'>
+              <Link to='/apps/customers/UpdateCustomizeUnit'>
                 {' '}
                 <h6 className='text-primary'> Customize Units</h6>
               </Link>
@@ -864,4 +870,4 @@ class UsersList extends React.Component {
     )
   }
 }
-export default UsersList
+export default UpdateCustomers

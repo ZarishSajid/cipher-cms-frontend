@@ -20,7 +20,14 @@ export function PrivateRoutes() {
   const viewCarriers=lazy(()=>import('../modules/apps/viewCarriers'))
   const bulkImport=lazy(()=>import('../modules/apps/bulkImport'))
   const ViewCustomers=lazy(()=>import('../modules/apps/customers/ViewCustomers'))
+  const Accounting=lazy(()=>import('../modules/apps/customers/Accounting'))
+  const CustomerContact=lazy(()=>import('../modules/apps/customers/CustomerContact'))
   const AddCustomers=lazy(()=>import('../modules/apps/customers/AddCustomers'))
+  const UpdateAccounting=lazy(()=>import('../modules/apps/customers/UpdateAccounting'))
+  const UpdateCustomerContact=lazy(()=>import('../modules/apps/customers/UpdateCustomerContact'))
+  const CustomizeUnit=lazy(()=>import('../modules/apps/customers/CustomizeUnit'))
+  const UpdateCustomizeUnit=lazy(()=>import('../modules/apps/customers/UpdateCustomizeUnit'))
+  const UpdateCustomers=lazy(()=>import('../modules/apps/customers/UpdateCustomers'))
   const ShipperDirectory=lazy(()=>import('../modules/apps/customers/ShipperDirectory'))
   const BulkImport=lazy(()=>import('../modules/apps/customers/BulkImport'))
 
@@ -44,7 +51,14 @@ export function PrivateRoutes() {
         <Route path='/apps/viewCarriers' component={viewCarriers}/>
         <Route path='/apps/bulkImport' component={bulkImport}/>
         <Route path='/apps/customers/ViewCustomers' component={ViewCustomers} />
+        <Route path='/apps/customers/Accounting' component={Accounting}/>
+        <Route path='/apps/customers/CustomerContact' component={CustomerContact}/>
+        <Route path='/apps/customers/CustomizeUnit' component={CustomizeUnit}/>
+        <Route path='/apps/customers/UpdateCustomizeUnit' component={UpdateCustomizeUnit}/>
         <Route path='/apps/customers/AddCustomers' component={AddCustomers} />
+        <Route path='/apps/customers/UpdateCustomers' component={UpdateCustomers} />
+        <Route path='/apps/customers/UpdateAccounting' component={UpdateAccounting}/>
+        <Route path='/apps/customers/UpdateCustomerContact' component={UpdateCustomerContact}/>
         <Route path='/apps/customers/ShipperDirectory' component={ShipperDirectory}/>
         <Route path='/apps/customers/BulkImport' component={BulkImport}/>
         <Redirect from='/auth' to='/dashboard' />
