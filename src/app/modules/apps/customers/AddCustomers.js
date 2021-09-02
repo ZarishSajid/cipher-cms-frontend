@@ -249,6 +249,8 @@ class UsersList extends React.Component {
       
         console.log('data', res.data.message)
         localStorage.setItem('id', res.data.data._id)
+       
+
         window.location.href = '/apps/customers/Accounting'
       } else {
         alert(res.data.message)

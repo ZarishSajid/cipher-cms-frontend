@@ -11,7 +11,7 @@ class UpdateAccounting extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-    
+    credit_hold:'',
       available_credit: '',
       credit_limit: '',
       payment_terms: '',
@@ -24,6 +24,27 @@ class UpdateAccounting extends React.Component {
     this.handleCreditLimit = this.handleCreditLimit.bind(this)
     this.handleAvailableCredit = this.handleAvailableCredit.bind(this)
     this.handlePaymentTerms = this.handlePaymentTerms.bind(this)
+  }
+  componentDidMount() {
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+
+    this.setState({
+      
+      available_credit: userData && userData._id
+      ? userData.available_credit
+      : this.state.available_credit,
+      credit_hold: userData && userData._id
+      ? userData.credit_hold
+      : this.state.credit_hold,
+      credit_limit: userData && userData._id
+      ? userData.credit_limit
+      : this.state.credit_limit,
+      payment_terms: userData && userData._id
+      ? userData.payment_terms
+      : this.state.payment_terms,
+
+    
+    })
   }
 
   onValueChange(e) {

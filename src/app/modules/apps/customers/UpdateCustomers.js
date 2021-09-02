@@ -55,52 +55,55 @@ class UpdateCustomers extends React.Component {
     this.handlePostalCode = this.handlePostalCode.bind(this)
     this.handleCity = this.handleCity.bind(this)
     this.handleState = this.handleState.bind(this)
-    this.handleTelephone = this.handleTelephone.bind(this)
-    this.onValueChange = this.onValueChange.bind(this)
-    this.handleCreditLimit = this.handleCreditLimit.bind(this)
-    this.handleAvailableCredit = this.handleAvailableCredit.bind(this)
-    this.handlePaymentTerms = this.handlePaymentTerms.bind(this)
-    this.handleContactName = this.handleContactName.bind(this)
-    this.handleWeightUnit = this.handleWeightUnit.bind(this)
-    this.handleDistanceUnit = this.handleDistanceUnit.bind(this)
-    this.handleTemperatureUnit = this.handleTemperatureUnit.bind(this)
-    this.handlePublicNotes = this.handlePublicNotes.bind(this)
-    this.handlePrivateNotes = this.handlePrivateNotes.bind(this)
+    this.handleTelephone = this.handleTelephone.bind(this)  
     this.handleMcInput = this.handleMcInput.bind(this)
   }
+  componentDidMount() {
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
 
-  handlePublicNotes(e) {
     this.setState({
-      public_notes: e.target.value,
+      
+      firstname: userData && userData._id
+      ? userData.firstname
+      : this.state.firstname,
+      lastname: userData && userData._id
+      ? userData.lastname
+      : this.state.lastname,
+      telephone: userData && userData._id
+      ? userData.telephone
+      : this.state.telephone,
+      country: userData && userData._id
+      ? userData.country
+      : this.state.country,
+      postal_code: userData && userData._id
+      ? userData.postal_code
+      : this.state.postal_code,
+      city: userData && userData._id
+      ? userData.city
+      : this.state.city,
+      street_1: userData && userData._id
+      ? userData.street_1
+      : this.state.street_1,
+      street_2: userData && userData._id
+      ? userData.street_2
+      : this.state.street_2,
+      mc_no: userData && userData._id
+      ? userData.mc_no
+      : this.state.mc_no,
+      mcInput: userData && userData._id
+      ? userData.mcInput
+      : this.state.mcInput,
+      state: userData && userData._id
+      ? userData.state
+      : this.state.state,
+      usdot_no: userData && userData._id
+      ? userData.usdot_no
+      : this.state.usdot_no,
     })
-    console.log('Public Notes =', this.state.public_notes)
   }
+ 
 
-  handlePrivateNotes(e) {
-    this.setState({
-      private_notes: e.target.value,
-    })
-    console.log('Private Notes =', this.state.private_notes)
-  }
-  handleTemperatureUnit(event) {
-    this.setState({temperature_unit: event.target.value})
-    console.log('Temperature Unit =', event.target.value)
-  }
-  handleWeightUnit(event) {
-    this.setState({weight_unit: event.target.value})
-    console.log('Weight Unit =', event.target.value)
-  }
-  handleDistanceUnit(event) {
-    this.setState({distance_unit: event.target.value})
-    console.log('Distance Unit =', event.target.value)
-  }
-
-  onValueChange(e) {
-    this.setState({
-      credit_hold: e.target.value,
-    })
-    console.log('credit_hold=', e.target.value)
-  }
+ 
 
   handleMcNumber(event) {
     this.setState({mc_no: event.target.value})
@@ -110,34 +113,15 @@ class UpdateCustomers extends React.Component {
   handleMcInput(event) {
     this.setState({mcInput: event.target.value})
     console.log('MC Input =', this.state.mcInput)
-  }
-  handleCreditLimit(event) {
-    this.setState({credit_limit: event.target.value})
-    console.log('Credit Limit =', this.state.credit_limit)
-  }
 
-  handleAvailableCredit(event) {
-    this.setState({available_credit: event.target.value})
-    console.log('Available Credit =', this.state.available_credit)
-  }
 
-  handlePaymentTerms(e) {
-    this.setState({
-      payment_terms: e.target.value,
-    })
-    console.log('Payment Terms =', this.state.payment_terms)
   }
-
-  handleContactName(e) {
-    this.setState({
-      contact_name: e.target.value,
-    })
-    console.log('Contact Name =', this.state.contact_name)
-  }
+ 
   handleFirstName(e) {
     this.setState({
-      firstname: e.target.value,
+     firstname: e.target.value
     })
+    
     console.log('First Name =', this.state.firstname)
   }
   handleLastName(e) {
@@ -243,27 +227,29 @@ class UpdateCustomers extends React.Component {
       mcInput: this.state.mcInput,
     }
 
-    axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
-      console.log('RESPONSE = ', res)
-      console.log(res.message)
-      if (res.data.success) {
-        <SweetAlert
-          success
-          title='Customer Details Saved'
-          onConfirm={this.onConfirm}
-          onCancel={this.onCancel}
-        />
-        console.log('data', res.data.message)
-        localStorage.setItem('id', res.data.data._id)
-        window.location.href = '/apps/customers/UpdateAccounting'
-      } else {
-        alert(res.data.message)
-      }
-    })
+  //   axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
+  //     console.log('RESPONSE = ', res)
+  //     console.log(res.message)
+  //     if (res.data.success) {
+  //       <SweetAlert
+  //         success
+  //         title='Customer Details Saved'
+  //         onConfirm={this.onConfirm}
+  //         onCancel={this.onCancel}
+  //       />
+  //       console.log('data', res.data.message)
+  //       localStorage.setItem('id', res.data.data._id)
+  //       window.location.href = '/apps/customers/UpdateAccounting'
+  //     } else {
+  //       alert(res.data.message)
+  //     }
+  //   })
+  // }
   }
-
   render() {
     const {stateList} = this.state
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
@@ -316,13 +302,16 @@ class UpdateCustomers extends React.Component {
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                       <label className='form-label required'>First Name</label>
-
+                      
                       <input
+                       type="text"
+                       name="firstname"
                         value={this.state.firstname}
                         onChange={this.handleFirstName}
-                        name='business_name'
                         className='form-control form-control-lg form-control-solid'
+                      
                       />
+                      
 
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>

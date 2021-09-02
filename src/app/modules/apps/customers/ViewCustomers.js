@@ -31,6 +31,7 @@ class UsersList extends React.Component {
 
 
   componentDidMount() {
+
     this.fetchData();
   }
 
@@ -125,11 +126,11 @@ class UsersList extends React.Component {
   render() {
     const {data} =this.state;
     const {open, openActive} = this.state
-    const userData =
-    this.props.to &&
-    this.props.to.aboutProps &&
-    this.props.to.aboutProps.userData;
-    console.log("User Dataa",userData)
+  const userData =
+this.props.location &&
+this.props.location.aboutProps &&
+this.props.location.aboutProps.userData;
+  
     return (
       <div>
         <PageTitle breadcrumbs={[]}>Users List</PageTitle>
@@ -275,6 +276,7 @@ class UsersList extends React.Component {
             <Link to={{
                             pathname: "/apps/customers/UpdateCustomers",
                             aboutProps: { userData: values },
+                            
                           }}> <button
     className="btn btn-icon btn-active-light-primary w-30px h-30px"
     data-kt-permissions-table-filter="delete_row"
