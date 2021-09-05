@@ -6,6 +6,8 @@ import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
 import {Link } from 'react-router-dom'
+import swal from 'sweetalert';
+
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -22,22 +24,12 @@ class UsersList extends React.Component {
       city: '',
       state: '',
       telephone: '',
-      available_credit: '',
-      credit_limit: '',
-      payment_terms: '',
-      contact_name: '',
-      contact_telephone: '',
-      contact_extension: '',
-      contact_email: '',
-      contact_fax: '',
-      weight_unit: '',
-      temperature_unit: '',
-      public_notes: '',
-      private_notes: '',
       value: 'mc',
+      email:'',
       mcInput: '',
       distance_unit: '',
       place_name: '',
+      customer_type:'',
       stateList: [],
       City: [],
       fireRedirect: false,
@@ -55,51 +47,14 @@ class UsersList extends React.Component {
     this.handleCity = this.handleCity.bind(this)
     this.handleState = this.handleState.bind(this)
     this.handleTelephone = this.handleTelephone.bind(this)
-    this.onValueChange = this.onValueChange.bind(this)
-    this.handleCreditLimit = this.handleCreditLimit.bind(this)
-    this.handleAvailableCredit = this.handleAvailableCredit.bind(this)
-    this.handlePaymentTerms = this.handlePaymentTerms.bind(this)
-    this.handleContactName = this.handleContactName.bind(this)
-    this.handleWeightUnit = this.handleWeightUnit.bind(this)
-    this.handleDistanceUnit = this.handleDistanceUnit.bind(this)
-    this.handleTemperatureUnit = this.handleTemperatureUnit.bind(this)
-    this.handlePublicNotes = this.handlePublicNotes.bind(this)
-    this.handlePrivateNotes = this.handlePrivateNotes.bind(this)
     this.handleMcInput = this.handleMcInput.bind(this)
+    this.handleEmail=this.handleEmail.bind(this)
+    this.handleCustomerType=this.handleCustomerType.bind(this)
   }
 
-  handlePublicNotes(e) {
-    this.setState({
-      public_notes: e.target.value,
-    })
-    console.log('Public Notes =', this.state.public_notes)
-  }
+  
 
-  handlePrivateNotes(e) {
-    this.setState({
-      private_notes: e.target.value,
-    })
-    console.log('Private Notes =', this.state.private_notes)
-  }
-  handleTemperatureUnit(event) {
-    this.setState({temperature_unit: event.target.value})
-    console.log('Temperature Unit =', event.target.value)
-  }
-  handleWeightUnit(event) {
-    this.setState({weight_unit: event.target.value})
-    console.log('Weight Unit =', event.target.value)
-  }
-  handleDistanceUnit(event) {
-    this.setState({distance_unit: event.target.value})
-    console.log('Distance Unit =', event.target.value)
-  }
 
-  onValueChange(e) {
-    this.setState({
-      credit_hold: e.target.value,
-    })
-    console.log('credit_hold=', e.target.value)
-  }
 
   handleMcNumber(event) {
     this.setState({mc_no: event.target.value})
@@ -107,41 +62,25 @@ class UsersList extends React.Component {
   }
 
   handleMcInput(event) {
-    this.setState({mcInput: event.target.value})
+    this.setState({mcInput: event.target.value.toUpperCase()})
     console.log('MC Input =', this.state.mcInput)
   }
-  handleCreditLimit(event) {
-    this.setState({credit_limit: event.target.value})
-    console.log('Credit Limit =', this.state.credit_limit)
-  }
 
-  handleAvailableCredit(event) {
-    this.setState({available_credit: event.target.value})
-    console.log('Available Credit =', this.state.available_credit)
-  }
+handleCustomerType(event){
+  this.setState({customer_type:event.target.value})
+  console.log("Customer Type ",event.target.value)
+}
 
-  handlePaymentTerms(e) {
-    this.setState({
-      payment_terms: e.target.value,
-    })
-    console.log('Payment Terms =', this.state.payment_terms)
-  }
-
-  handleContactName(e) {
-    this.setState({
-      contact_name: e.target.value,
-    })
-    console.log('Contact Name =', this.state.contact_name)
-  }
+  
   handleFirstName(e) {
     this.setState({
-      firstname: e.target.value,
+      firstname: e.target.value.toUpperCase(),
     })
     console.log('First Name =', this.state.firstname)
   }
   handleLastName(e) {
     this.setState({
-      lastname: e.target.value,
+      lastname: e.target.value.toUpperCase(),
     })
     console.log('Last Name =', this.state.lastname)
   }
@@ -152,16 +91,24 @@ class UsersList extends React.Component {
     console.log('Country =', e.target.value)
   }
 
+  handleEmail(e) {
+    this.setState({
+      email: e.target.value.toUpperCase(),
+    })
+    console.log('Email =', this.state.email)
+  }
+
+
   handleStreet1(e) {
     this.setState({
-      street_1: e.target.value,
+      street_1: e.target.value.toUpperCase(),
     })
     console.log('Street 1 =', this.state.street_1)
   }
 
   handleStreet2(e) {
     this.setState({
-      street_2: e.target.value,
+      street_2: e.target.value.toUpperCase(),
     })
     console.log('Street 2 =', this.state.street_2)
   }
@@ -173,7 +120,7 @@ class UsersList extends React.Component {
   }
 
   handlePostalCode(event) {
-    console.log('Value from postal code:', event.target.value)
+    console.log('Value from postal code:', event.target.value.toUpperCase())
 
     this.setState(
       {
@@ -227,6 +174,11 @@ class UsersList extends React.Component {
   }
 
   saveData = (e) => {
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
+
     const data = {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
@@ -240,20 +192,30 @@ class UsersList extends React.Component {
       usdot_no: this.state.usdot_no,
       mc_no: this.state.mc_no,
       mcInput: this.state.mcInput,
+      customer_type:this.state.customer_type,
+      email:this.state.email
     }
-
+console.log("console befor axios")
     axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
-      console.log('RESPONSE = ', res)
+      console.log('RESPONSE = ', res.data.data)
       console.log(res.message)
       if (res.data.success) {
       
         console.log('data', res.data.message)
-        localStorage.setItem('id', res.data.data._id)
-       
-
-        window.location.href = '/apps/customers/Accounting'
+         localStorage.setItem('id', res.data.data._id)
+        
+          swal({
+          text: " Saved Sucessfully!",
+          icon: "success",
+        });
+        console.log(" userdata in if condition",userData)
+         window.location.href = '/apps/customers/Accounting'
       } else {
-        alert(res.data.message)
+        console.log("else response",res)
+        swal({
+          text: res.data.message,
+          icon: "error",
+        });
       }
     })
   }
@@ -316,7 +278,7 @@ class UsersList extends React.Component {
                       <input
                         value={this.state.firstname}
                         onChange={this.handleFirstName}
-                        name='business_name'
+                        name='firstname'
                         className='form-control form-control-lg form-control-solid'
                       />
 
@@ -331,7 +293,52 @@ class UsersList extends React.Component {
                         name='lastname'
                         className='form-control form-control-lg form-control-solid'
                       />
+                      <br/>
+ <div className='col-md-12 fv-row'>
+                      <div className='row fv-row fv-plugins-icon-container'>
+                        <div className='col-6'>
+                          <label className=' fs-6 fw-bold form-label mb-2'>Email</label>
 
+                          <input
+                            value={this.state.email}
+                            onChange={this.handleEmail}
+                            type='email'
+                            className='form-control form-control-solid'
+                            name='email'
+                          />
+                          <div className='fv-plugins-message-container invalid-feedback'></div>
+                        </div>
+
+                        <div className='col-6'>
+                          <label className='fs-6 fw-bold form-label mb-2'>Customer Type</label>
+
+                          
+                          <div className='input-group-prepend'>
+                          <select
+                            onChange={this.handleCustomerType}
+                            value={this.state.customer_type}
+                            type='text'
+                            className='form-control form-control-solid'
+                            name='customer_type'
+                            data-control='select2'
+                            data-hide-search='true'
+                            data-select2-id='select2-data-13-fi4w'
+                            tabIndex={-1}
+                            aria-hidden='true'
+                          >
+                            <option value='DISTRIBUTORC'>DISTRIBUTOR</option>
+                            <option value='COMMERCE'>COMMERCE</option>
+                            <option value='FEDERAL GOVERNMENT'>FEDERAL GOVERNMENT</option>
+                            <option value='MANUFACTURER'>MANUFACTURER</option>
+                            <option value='MAILING COMPANY'>MAILING COMPANY</option>                          
+                            <option value='STATE GOVERNMENT'>STATE GOVERNMENT</option>                          
+
+                          </select>
+                        </div>
+                          <div className='fv-plugins-message-container invalid-feedback'></div>
+                        </div>
+                      </div>
+                    </div>
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>

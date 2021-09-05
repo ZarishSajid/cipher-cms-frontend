@@ -6,7 +6,8 @@ import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
 import {Link} from 'react-router-dom'
-import SweetAlert from 'react-bootstrap-sweetalert';
+import swal from 'sweetalert';
+
 class UpdateCustomers extends React.Component {
   constructor(props) {
     super(props)
@@ -43,6 +44,10 @@ class UpdateCustomers extends React.Component {
       City: [],
       fireRedirect: false,
       redirectRoute: '',
+      customerContact:[],
+      email:'',
+      id:'',
+      customer_type:'',
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -57,15 +62,41 @@ class UpdateCustomers extends React.Component {
     this.handleState = this.handleState.bind(this)
     this.handleTelephone = this.handleTelephone.bind(this)  
     this.handleMcInput = this.handleMcInput.bind(this)
+    this.handleEmail=this.handleEmail.bind(this)
+    this.handleCustomerType=this.handleCustomerType.bind(this)
   }
   componentDidMount() {
-    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+console.log("user data in update customer",userData)
+this.setState({
+  id:userData._id
+})
+    console.log("id inside componentt did mount ****",userData._id)
 
+axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).then((res) => {
+      console.log('RESPONSE = ', res)
+      console.log(res.message)
+      if (res.data.success) {
+        //  aboutProps: { customerContact}
+        this.setState({
+          customerContact:res.data.data
+        })
+        console.log(' if res for customer contact',this.state.customerContact)
+        userData.customerContact=this.state.customerContact
+        console.log(' if res for user data',userData)
+
+      } else {
+        console.log(' else response for customer list', res)
+
+      }
+    })
     this.setState({
       
       firstname: userData && userData._id
       ? userData.firstname
       : this.state.firstname,
+
+      
       lastname: userData && userData._id
       ? userData.lastname
       : this.state.lastname,
@@ -99,6 +130,12 @@ class UpdateCustomers extends React.Component {
       usdot_no: userData && userData._id
       ? userData.usdot_no
       : this.state.usdot_no,
+    customer_type: userData && userData._id
+      ? userData.customer_type
+      : this.state.customer_type,
+      email: userData && userData._id
+      ? userData.email
+      : this.state.email,
     })
   }
  
@@ -111,7 +148,7 @@ class UpdateCustomers extends React.Component {
   }
 
   handleMcInput(event) {
-    this.setState({mcInput: event.target.value})
+    this.setState({mcInput: event.target.value.toUpperCase()})
     console.log('MC Input =', this.state.mcInput)
 
 
@@ -119,14 +156,14 @@ class UpdateCustomers extends React.Component {
  
   handleFirstName(e) {
     this.setState({
-     firstname: e.target.value
+     firstname: e.target.value.toUpperCase()
     })
     
     console.log('First Name =', this.state.firstname)
   }
   handleLastName(e) {
     this.setState({
-      lastname: e.target.value,
+      lastname: e.target.value.toUpperCase(),
     })
     console.log('Last Name =', this.state.lastname)
   }
@@ -139,26 +176,26 @@ class UpdateCustomers extends React.Component {
 
   handleStreet1(e) {
     this.setState({
-      street_1: e.target.value,
+      street_1: e.target.value.toUpperCase(),
     })
     console.log('Street 1 =', this.state.street_1)
   }
 
   handleStreet2(e) {
     this.setState({
-      street_2: e.target.value,
+      street_2: e.target.value.toUpperCase(),
     })
     console.log('Street 2 =', this.state.street_2)
   }
   handleUsDot(e) {
     this.setState({
-      usdot_no: e.target.value,
+      usdot_no: e.target.value.toUpperCase(),
     })
     console.log('USDOT Number =', this.state.usdot_no)
   }
 
   handlePostalCode(event) {
-    console.log('Value from postal code:', event.target.value)
+    console.log('Value from postal code:', event.target.value.toUpperCase())
 
     this.setState(
       {
@@ -210,8 +247,23 @@ class UpdateCustomers extends React.Component {
     })
     console.log('Phone =', this.state.telephone)
   }
+  handleEmail(e) {
+    this.setState({
+      email: e.target.value.toUpperCase(),
+    })
+    console.log('Email =', this.state.email)
+  }
+  handleCustomerType(event){
+    this.setState({customer_type:event.target.value})
+    console.log("Customer Type ",event.target.value)
+  }
+  
 
   saveData = (e) => {
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+
+  var id=userData._id;
+ console.log("### id inside save method ##",id)
     const data = {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
@@ -225,37 +277,43 @@ class UpdateCustomers extends React.Component {
       usdot_no: this.state.usdot_no,
       mc_no: this.state.mc_no,
       mcInput: this.state.mcInput,
+      email:this.state.email,
+      customer_type:this.state.customer_type
+      
     }
-
-  //   axios.post(`http://localhost:8080/api/add_new_customer`, data).then((res) => {
-  //     console.log('RESPONSE = ', res)
-  //     console.log(res.message)
-  //     if (res.data.success) {
-  //       <SweetAlert
-  //         success
-  //         title='Customer Details Saved'
-  //         onConfirm={this.onConfirm}
-  //         onCancel={this.onCancel}
-  //       />
-  //       console.log('data', res.data.message)
-  //       localStorage.setItem('id', res.data.data._id)
-  //       window.location.href = '/apps/customers/UpdateAccounting'
-  //     } else {
-  //       alert(res.data.message)
-  //     }
-  //   })
-  // }
+    axios.put(`http://localhost:8080/api/update_new_customer/${id}`, data).then((res) => {
+      console.log('RESPONSE = ', res)
+      console.log(res.message)
+      if (res.data.success) {
+        swal({
+          text: " Updated Sucessfully!",
+          icon: "success",
+        });
+        console.log('data', res.data.message)
+        this.props.history.push({ 
+          pathname: '/apps/customers/UpdateAccounting',
+          aboutProps:{userData}});
+      } else {
+        swal({
+          text: res.data.message,
+          icon: "error",
+        });  
+      }
+    })
   }
+  
   render() {
     const {stateList} = this.state
-    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
-
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link active'>
-              <Link to='/apps/customers/UpdateCustomers'>
+              <Link to= {{ pathname: '/apps/customers/UpdateCustomers', aboutProps: { userData}}}>
                 {' '}
                 <h6 className='text-primary'> Customer Details</h6>
               </Link>
@@ -263,21 +321,23 @@ class UpdateCustomers extends React.Component {
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/UpdateAccounting'>
+              <Link to= {{ pathname: '/apps/customers/UpdateAccounting',
+                            
+                            aboutProps: { userData}}}>
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/UpdateCustomerContact'>
+              <Link to= {{ pathname:'/apps/customers/UpdateCustomerContact', aboutProps: { userData}}}>
                 <h6 className='text-primary'> Contact Contact Details</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/UpdateCustomizeUnit'>
+              <Link to= {{ pathname:'/apps/customers/UpdateCustomizeUnit', aboutProps: { userData}}}>
                 {' '}
                 <h6 className='text-primary'> Customize Units</h6>
               </Link>
@@ -324,7 +384,52 @@ class UpdateCustomers extends React.Component {
                         name='lastname'
                         className='form-control form-control-lg form-control-solid'
                       />
+ <br/>
+ <div className='col-md-12 fv-row'>
+                      <div className='row fv-row fv-plugins-icon-container'>
+                        <div className='col-6'>
+                          <label className=' fs-6 fw-bold form-label mb-2'>Email</label>
 
+                          <input
+                            value={this.state.email}
+                            onChange={this.handleEmail}
+                            type='email'
+                            className='form-control form-control-solid'
+                            name='email'
+                          />
+                          <div className='fv-plugins-message-container invalid-feedback'></div>
+                        </div>
+
+                        <div className='col-6'>
+                          <label className='fs-6 fw-bold form-label mb-2'>Customer Type</label>
+
+                          
+                          <div className='input-group-prepend'>
+                          <select
+                            onChange={this.handleCustomerType}
+                            value={this.state.customer_type}
+                            type='text'
+                            className='form-control form-control-solid'
+                            name='customer_type'
+                            data-control='select2'
+                            data-hide-search='true'
+                            data-select2-id='select2-data-13-fi4w'
+                            tabIndex={-1}
+                            aria-hidden='true'
+                          >
+                            <option value='DISTRIBUTORC'>DISTRIBUTOR</option>
+                            <option value='COMMERCE'>COMMERCE</option>
+                            <option value='FEDERAL GOVERNMENT'>FEDERAL GOVERNMENT</option>
+                            <option value='MANUFACTURER'>MANUFACTURER</option>
+                            <option value='MAILING COMPANY'>MAILING COMPANY</option>                          
+                            <option value='STATE GOVERNMENT'>STATE GOVERNMENT</option>                          
+
+                          </select>
+                        </div>
+                          <div className='fv-plugins-message-container invalid-feedback'></div>
+                        </div>
+                      </div>
+                      </div>
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
@@ -806,7 +911,7 @@ class UpdateCustomers extends React.Component {
                       data-kt-stepper-action='submit'
                     >
                       <span className='indicator-label'>
-                        Save
+                        Update
                         <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
                       </span>
                     </button>

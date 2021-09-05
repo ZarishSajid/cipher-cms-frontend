@@ -6,6 +6,7 @@ import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
 import {Link} from 'react-router-dom'
+import swal from 'sweetalert';
 
 class UpdateCustomizeUnit extends React.Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class UpdateCustomizeUnit extends React.Component {
       private_notes: '',
       fireRedirect: false,
       redirectRoute: "",
+      
     }
     this.saveCustomizeUnit=this.saveCustomizeUnit.bind(this)
     this.handleWeightUnit = this.handleWeightUnit.bind(this)
@@ -26,17 +28,41 @@ class UpdateCustomizeUnit extends React.Component {
     this.handlePublicNotes = this.handlePublicNotes.bind(this)
     this.handlePrivateNotes = this.handlePrivateNotes.bind(this)
   }
+  componentDidMount() {
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+  console.log("user data from view table in update customize  page",userData)
+    this.setState({
+      
+      weight_unit: userData && userData._id
+      ? userData.weight_unit
+      : this.state.weight_unit,
+      distance_unit: userData && userData._id
+      ? userData.distance_unit
+      : this.state.distance_unit,
+      temperature_unit: userData && userData._id
+      ? userData.temperature_unit
+      : this.state.temperature_unit,
+      public_notes: userData && userData._id
+      ? userData.public_notes
+      : this.state.public_notes,
+      private_notes: userData && userData._id
+      ? userData.private_notes
+      : this.state.private_notes,
+
+    
+    })
+  }
 
   handlePublicNotes(e) {
     this.setState({
-      public_notes: e.target.value,
+      public_notes: e.target.value.toUpperCase(),
     })
     console.log('Public Notes =', this.state.public_notes)
   }
 
   handlePrivateNotes(e) {
     this.setState({
-      private_notes: e.target.value,
+      private_notes: e.target.value.toUpperCase(),
     })
     console.log('Private Notes =', this.state.private_notes)
   }
@@ -57,6 +83,10 @@ class UpdateCustomizeUnit extends React.Component {
 
 
   saveCustomizeUnit = (e) => {
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
     var id = localStorage.getItem('id')
     console.log(id, 'id inside save accounting details')
     const data = {
@@ -70,8 +100,14 @@ class UpdateCustomizeUnit extends React.Component {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-        alert(' New Customer added Sucessfully ')
-        window.location.href = '/apps/customers/UpdateCustomers'
+        swal({
+          text: " New Customer Added Sucessfully!",
+          icon: "success",
+        });
+        console.log('data', res.data.message)
+        this.props.history.push({ 
+          pathname: '/apps/customers/UpdateCustomers',
+          aboutProps:{userData}});
 
         console.log('data', res.data.message)
       } else {
@@ -81,6 +117,10 @@ class UpdateCustomizeUnit extends React.Component {
   }
 
   render() {
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
     
 const {stateList}=this.state
     return (
@@ -88,22 +128,22 @@ const {stateList}=this.state
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link ' >
-            <Link to='/apps/customers/UpdateCustomers'><h6 className='text-primary'> Customer Details</h6></Link>
+            <Link to={{pathname:'/apps/customers/UpdateCustomers',  aboutProps: { userData}}}><h6 className='text-primary'> Customer Details</h6></Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'  >
-             <Link to='/apps/customers/UpdateAccounting' ><h6 className='text-primary'> Accounting</h6></Link>
+             <Link to={{pathname:'/apps/customers/UpdateAccounting',  aboutProps: { userData}}} ><h6 className='text-primary'> Accounting</h6></Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'  >
-            <Link to='/apps/customers/UpdateCustomerContact'><h6 className='text-primary'> Contact Contact Details</h6></Link>
+            <Link to={{pathname:'/apps/customers/UpdateCustomerContact',  aboutProps: { userData}}}><h6 className='text-primary'> Contact Contact Details</h6></Link>
             </a>
           </li>
           <li className='nav-item active'>
             <a className='nav-link' >
-             <Link to='/apps/customers/UpdateCustomizeUnit'> <h6 className='text-primary'> Customize Units</h6></Link>
+             <Link to={{pathname:'/apps/customers/UpdateCustomizeUnit',  aboutProps: { userData}}}> <h6 className='text-primary'> Customize Units</h6></Link>
             </a>
           </li>
         </ul>

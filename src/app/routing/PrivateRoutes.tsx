@@ -30,6 +30,7 @@ export function PrivateRoutes() {
   const UpdateCustomers=lazy(()=>import('../modules/apps/customers/UpdateCustomers'))
   const ShipperDirectory=lazy(()=>import('../modules/apps/customers/ShipperDirectory'))
   const BulkImport=lazy(()=>import('../modules/apps/customers/BulkImport'))
+  const AddCustomerContact=lazy(()=>import('../modules/apps/customers/AddCustomerContact'))
 
   return (
     <Suspense fallback={<FallbackView />}>
@@ -61,6 +62,7 @@ export function PrivateRoutes() {
         <Route path='/apps/customers/UpdateCustomerContact' component={UpdateCustomerContact}/>
         <Route path='/apps/customers/ShipperDirectory' component={ShipperDirectory}/>
         <Route path='/apps/customers/BulkImport' component={BulkImport}/>
+        <Route path='/apps/customers/AddCustomerContact' component={AddCustomerContact}/>
         <Redirect from='/auth' to='/dashboard' />
         <Redirect exact from='/' to='/dashboard' />
         <Redirect to='error/404' />

@@ -61,13 +61,13 @@ class UsersList extends React.Component {
 
   handleUsername(e) {
     this.setState({
-      username: e.target.value,
+      username: e.target.value.toUpperCase(),
     })
     console.log('username =', this.state.username)
   }
   handleEmail(e) {
     this.setState({
-      email: e.target.value,
+      email: e.target.value.toUpperCase(),
     })
     console.log('email =', this.state.email)
   }

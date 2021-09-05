@@ -6,11 +6,11 @@ import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
 import {Link} from 'react-router-dom'
-import {ToastContainer, toast} from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
 import swal from 'sweetalert';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
-class CustomerContact extends React.Component {
+class AddCustomerContact extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -23,14 +23,44 @@ class CustomerContact extends React.Component {
       redirectRoute: '',
     }
     this.saveContactList = this.saveContactList.bind(this)
-    this.addContact = this.addContact.bind(this)
+    this.addContact=this.addContact.bind(this)
     this.handleContactTelephone = this.handleContactTelephone.bind(this)
     this.handleContactExtension = this.handleContactExtension.bind(this)
     this.handleEmail = this.handleEmail.bind(this)
     this.handleFax = this.handleFax.bind(this)
-    this.handleContactName = this.handleContactName.bind(this)
+    this.handleContactName=this.handleContactName.bind(this)
   }
 
+
+  componentDidMount() {
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+  console.log("data in Add customer contact",userData)
+  this.setState({
+      
+    contact_name: userData && userData._id
+    ? userData.contact_name
+    : this.state.contact_name,
+    contact_telephone: userData && userData._id
+    ? userData.contact_telephone
+    : this.state.contact_telephone,
+    contact_email: userData && userData._id
+    ? userData.contact_email
+    : this.state.contact_email,
+    contact_fax: userData && userData._id
+    ? userData.contact_fax
+    : this.state.contact_fax,
+    contact_extension: userData && userData._id
+    ? userData.contact_extension
+    : this.state.contact_extension,
+
+  
+  })
+ 
+  }
+
+
+
+ 
   handleContactExtension(e) {
     this.setState({
       contact_extension: e.target.value,
@@ -55,9 +85,10 @@ class CustomerContact extends React.Component {
     })
     console.log('Contact Name=', this.state.contact_name)
   }
+  
   handleFax(e) {
     this.setState({
-      contact_fax: e.target.value.toUpperCase(),
+      contact_fax: e.target.value,
     })
     console.log('Contact Fax=', this.state.contact_fax)
   }
@@ -71,9 +102,9 @@ class CustomerContact extends React.Component {
       contact_extension: '',
     })
     swal({
-      text: 'Customer Details Saved!',
-      icon: 'success',
-    })
+        text: "Customer Details Saved!",
+        icon: "success",
+      });
     // window.location.reload(false);
   }
 
@@ -94,13 +125,18 @@ class CustomerContact extends React.Component {
         swal({
           text: " Saved Sucessfully!",
           icon: "success",
-        });        console.log('data', res.data.message)
-        window.location.href = '/apps/customers/CustomizeUnit'
+        });
+        console.log('data', res.data.message)
+        //  window.location.href = '/apps/customers/CustomizeUnit'
+        this.props.history.push({ 
+          pathname: '/apps/customers/CustomizeUnit',
+          // aboutProps:{userData}
+        });
       } else {
         swal({
           text: res.data.message,
           icon: "error",
-        });    
+        });  
       }
     })
   }
@@ -130,34 +166,35 @@ class CustomerContact extends React.Component {
   }
 
   render() {
+    const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
+
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/AddCustomers'>
-                {' '}
+              <Link  to={{pathname:'/apps/customers/UpdateCustomers', aboutProps: {userData}}}>
                 <h6 className='text-primary'> Customer Details</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/Accounting'>
+              <Link to={{pathname:'/apps/customers/UpdateAccounting', aboutProps: {userData}}}>
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link active'>
-              <Link to='/apps/customers/CustomerContact'>
-                <h6 className='text-primary'> Contact Contact Details</h6>
-              </Link>
+            <Link to={{ pathname: '/apps/customers/UpdateCustomerContact',aboutProps: { userData}}} > 
+            <h6 className='text-primary'> Customer Contact Details</h6></Link>
+              
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/CustomizeUnit'>
+              <Link to={{pathname:'/apps/customers/UpdateCustomizeUnit', aboutProps: {userData}}}>
                 {' '}
                 <h6 className='text-primary'> Customize Units</h6>
               </Link>
@@ -178,18 +215,21 @@ class CustomerContact extends React.Component {
                 <div className='w-100' data-select2-id='select2-data-77-feqh'>
                   <div className='pb-10 pb-lg-12'>
                     <br />
-                    <h2 className='fw-bolder text-dark'>
-                      Customer Contact List
-                      <span>
-                        <button
-                          onClick={() => this.addContact()}
-                          type='button'
-                          className='btn btn-lg btn-primary me-3 d-inline-block margin-70'
-                          data-kt-stepper-action='submit'
-                        >
-                          <span className='indicator-label'>Add New contact</span>
-                        </button>
-                      </span>
+                    <h2 className='fw-bolder text-dark'>Customer Contact List
+                    <span>
+                   <button
+                    onClick={() => this.addContact()}
+                    type='button'
+                    className='btn btn-lg btn-primary me-3 d-inline-block margin-70'
+                    data-kt-stepper-action='submit'
+                  >
+                    <span className='indicator-label'>
+                      Add New contact
+                      
+                    </span>
+                  </button>
+                  
+                    </span>
                     </h2>
                   </div>
 
@@ -206,7 +246,6 @@ class CustomerContact extends React.Component {
 
                     <div className='fv-plugins-message-container invalid-feedback'></div>
                   </div>
-
                   <br />
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
@@ -266,6 +305,7 @@ class CustomerContact extends React.Component {
                   type='text'
                   value={this.state.contact_fax}
                   onChange={this.handleFax}
+                  onInput={(e) => e.target.value = ("" + e.target.value).toUpperCase()}
                   name='contact_fax'
                   className='form-control form-control-lg form-control-solid'
                 />{' '}
@@ -273,8 +313,7 @@ class CustomerContact extends React.Component {
 
               <div className='d-flex flex-stack pt-15'>
                 <div className='mr-2'>
-                  <Link to='/apps/customers/Accounting'>
-                    {' '}
+                <Link to={{ pathname: '/apps/customers/UpdateCustomerContact',aboutProps: { userData}}} > 
                     <button
                       type='button'
                       className='btn btn-lg btn-light-primary me-3'
@@ -316,23 +355,12 @@ class CustomerContact extends React.Component {
                     data-kt-stepper-action='submit'
                   >
                     <span className='indicator-label'>
-                      Save
+                      Update
                       <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
                     </span>
                   </button>
-
-                  <Link to='/apps/customers/CustomizeUnit'>
-                    <button
-                      type='button'
-                      className='btn btn-lg btn-primary me-3 d-inline-block'
-                      data-kt-stepper-action='submit'
-                    >
-                      <span className='indicator-label'>
-                        Next
-                        <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
-                      </span>
-                    </button>
-                  </Link>
+                  
+                 
                 </div>
               </div>
               <div></div>
@@ -348,4 +376,4 @@ class CustomerContact extends React.Component {
     )
   }
 }
-export default CustomerContact
+export default AddCustomerContact

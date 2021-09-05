@@ -6,7 +6,7 @@ import clsx from 'clsx'
 import {useLayout} from '../../core'
 import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 import {AsideMenu} from './AsideMenu'
-
+import '../../../../app/modules/apps/index.css'
 const AsideDefault: FC = () => {
   const {config, classes} = useLayout()
   const {aside} = config
@@ -30,8 +30,8 @@ const AsideDefault: FC = () => {
           <Link to='/dashboard'>
             <img
               alt='Logo'
-              className='h-15px logo'
-              src={toAbsoluteUrl('/media/logos/logo-1.svg')}
+              className='header-logo logo'
+              src={toAbsoluteUrl('/media/logos/OXTMS.png')}
             />
           </Link>
         )}

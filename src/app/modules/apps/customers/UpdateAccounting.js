@@ -5,8 +5,8 @@ import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
-import {Link} from 'react-router-dom'
-
+import {Link,Redirect} from 'react-router-dom'
+import swal from 'sweetalert';
 class UpdateAccounting extends React.Component {
   constructor(props) {
     super(props)
@@ -17,9 +17,8 @@ class UpdateAccounting extends React.Component {
       payment_terms: '',
       fireRedirect: false,
       redirectRoute: '',
+      id:''
     }
-    this.saveAccountingDetail = this.saveAccountingDetail.bind(this)
-
     this.onValueChange = this.onValueChange.bind(this)
     this.handleCreditLimit = this.handleCreditLimit.bind(this)
     this.handleAvailableCredit = this.handleAvailableCredit.bind(this)
@@ -27,9 +26,10 @@ class UpdateAccounting extends React.Component {
   }
   componentDidMount() {
     const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
-
+   console.log("user data from view table from accounting",userData)
+    this.setState({id:userData._id})
+    console.log("id in update accounting",this.state.id)
     this.setState({
-      
       available_credit: userData && userData._id
       ? userData.available_credit
       : this.state.available_credit,
@@ -42,38 +42,16 @@ class UpdateAccounting extends React.Component {
       payment_terms: userData && userData._id
       ? userData.payment_terms
       : this.state.payment_terms,
-
-    
     })
   }
-
-  onValueChange(e) {
-    this.setState({
-      credit_hold: e.target.value,
-    })
-    console.log('credit_hold=', e.target.value)
-  }
-
-  handleCreditLimit(event) {
-    this.setState({credit_limit: event.target.value})
-    console.log('Credit Limit =', this.state.credit_limit)
-  }
-
-  handleAvailableCredit(event) {
-    this.setState({available_credit: event.target.value})
-    console.log('Available Credit =', this.state.available_credit)
-  }
-
-  handlePaymentTerms(e) {
-    this.setState({
-      payment_terms: e.target.value,
-    })
-    console.log('Payment Terms =', this.state.payment_terms)
-  }
-
   saveAccountingDetail = (e) => {
-    var id = localStorage.getItem('id')
-    console.log(id, 'id inside save accounting details')
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
+   var id = this.state.id
+    
+     console.log(id, 'id inside save accounting details')
     const data = {
       available_credit: this.state.available_credit,
       credit_limit: this.state.credit_limit,
@@ -84,40 +62,79 @@ class UpdateAccounting extends React.Component {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-        alert('Customer Details Saved')
+        swal({
+          text: " Saved Sucessfully!",
+          icon: "success",
+        });
         console.log('data', res.data.message)
-        window.location.href = '/apps/customers/UpdateCustomerContact'
-
-
+        this.props.history.push({ 
+ pathname: '/apps/customers/UpdateCustomerContact',
+ aboutProps:{userData}});
+        //  window.location.href = '/apps/customers/UpdateCustomerContact'
       } else {
-        alert(res.data.message)
-      }
+        swal({
+          text: res.data.message,
+          icon: "error",
+        });      }
     })
   }
 
+
+  onValueChange(e) {
+    this.setState({
+      credit_hold: e.target.value,
+    })
+    console.log('credit_hold=', e.target.value)
+  }
+
+  handleCreditLimit(event) {
+    this.setState({credit_limit: event.target.value.toUpperCase()})
+    console.log('Credit Limit =', this.state.credit_limit)
+  }
+
+  handleAvailableCredit(event) {
+    this.setState({available_credit: event.target.value.toUpperCase()})
+    console.log('Available Credit =', this.state.available_credit)
+  }
+
+  handlePaymentTerms(e) {
+    this.setState({
+      payment_terms: e.target.value.toUpperCase(),
+    })
+    console.log('Payment Terms =', this.state.payment_terms)
+  }
+
+  
+
   render() {
     const {stateList} = this.state
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData;
     return (
         <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link'>
-            <Link to='/apps/customers/UpdateCustomers' > <h6 className='text-primary'> Customer Details</h6></Link>
+            <Link to= {{ pathname: '/apps/customers/UpdateCustomers',
+                            
+                            aboutProps: { userData}}}> <h6 className='text-primary'> Customer Details</h6></Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link active'  >
-             <Link to='/apps/customers/UpdateAccounting' ><h6 className='text-primary'> Accounting</h6></Link>
+             <Link to={{ pathname:'/apps/customers/UpdateAccounting',aboutProps:{userData}}} ><h6 className='text-primary'> Accounting</h6></Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link' >
-            <Link to='/apps/customers/UpdateCustomerContact' > <h6 className='text-primary'> Customer Contact Details</h6></Link>
+            <Link to={{ pathname: '/apps/customers/UpdateCustomerContact',aboutProps: { userData}}} > <h6 className='text-primary'> Customer Contact Details</h6></Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link' >
-            <Link to='/apps/customers/UpdateCustomizeUnit' ><h6 className='text-primary'> Customize Units</h6></Link>
+            <Link to={{ pathname:'/apps/customers/UpdateCustomizeUnit',aboutProps: { userData}}} ><h6 className='text-primary'> Customize Units</h6></Link>
             </a>
           </li>
         </ul>
@@ -260,7 +277,7 @@ class UpdateAccounting extends React.Component {
                       data-kt-stepper-action='submit'
                     >
                       <span className='indicator-label'>
-                        Save
+                        Update
                         <span className='svg-icon svg-icon-3 ms-2 me-0'></span>
                       </span>
                     </button>

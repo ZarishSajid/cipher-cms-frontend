@@ -6,6 +6,7 @@ import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
 import {Link} from 'react-router-dom'
+import swal from 'sweetalert';
 
 class UsersList extends React.Component {
   constructor(props) {
@@ -29,14 +30,14 @@ class UsersList extends React.Component {
 
   handlePublicNotes(e) {
     this.setState({
-      public_notes: e.target.value,
+      public_notes: e.target.value.toUpperCase(),
     })
     console.log('Public Notes =', this.state.public_notes)
   }
 
   handlePrivateNotes(e) {
     this.setState({
-      private_notes: e.target.value,
+      private_notes: e.target.value.toUpperCase(),
     })
     console.log('Private Notes =', this.state.private_notes)
   }
@@ -70,13 +71,18 @@ class UsersList extends React.Component {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-        alert(' New Customer added Sucessfully ')
+        swal({
+          text: " New Customer Added Sucessfully!",
+          icon: "success",
+        });
         window.location.href = '/apps/customers/AddCustomers'
 
         console.log('data', res.data.message)
       } else {
-        alert(res.data.message)
-      }
+        swal({
+          text: res.data.message,
+          icon: "error",
+        });          }
     })
   }
 
