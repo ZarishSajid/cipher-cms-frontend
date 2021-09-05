@@ -27,8 +27,8 @@ class UpdateAccounting extends React.Component {
   componentDidMount() {
     const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
    console.log("user data from view table from accounting",userData)
-    this.setState({id:userData._id})
-    console.log("id in update accounting",this.state.id)
+    // this.setState({id:userData._id})
+    // console.log("id in update accounting",this.state.id)
     this.setState({
       available_credit: userData && userData._id
       ? userData.available_credit
@@ -49,9 +49,11 @@ class UpdateAccounting extends React.Component {
     this.props.location &&
     this.props.location.aboutProps &&
     this.props.location.aboutProps.userData;
-   var id = this.state.id
+  //  var id = this.state.id
     
-     console.log(id, 'id inside save accounting details')
+  //    console.log(id, 'id inside save accounting details')
+  const id = localStorage.getItem("customer_id");
+
     const data = {
       available_credit: this.state.available_credit,
       credit_limit: this.state.credit_limit,
@@ -177,7 +179,7 @@ class UpdateAccounting extends React.Component {
 
                       <input
                         type='text'
-                        value={this.state.availablecredit}
+                        value={this.state.available_credit}
                         onChange={this.handleAvailableCredit}
                         name='available_credit'
                         className='form-control form-control-lg form-control-solid'

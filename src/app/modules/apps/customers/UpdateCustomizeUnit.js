@@ -79,14 +79,8 @@ class UpdateCustomizeUnit extends React.Component {
     console.log('Distance Unit =', event.target.value)
   }
 
- 
-
-
   saveCustomizeUnit = (e) => {
-    const userData =
-    this.props.location &&
-    this.props.location.aboutProps &&
-    this.props.location.aboutProps.userData;
+    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
     var id = localStorage.getItem('id')
     console.log(id, 'id inside save accounting details')
     const data = {

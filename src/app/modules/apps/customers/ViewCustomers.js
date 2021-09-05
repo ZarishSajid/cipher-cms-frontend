@@ -48,7 +48,8 @@ class UsersList extends React.Component {
       swal({
         text: "UnBlocked Sucessfully!",
         icon: "success",
-      });          window.location.reload(false);
+      });          
+      window.location.reload(false);
     });
   }
   componentDidMount() {
@@ -80,25 +81,7 @@ class UsersList extends React.Component {
       })
   }
 
-  handleSubmit(e) {
-    e.preventDefault()
-    const data = {
-      username: this.state.username,
-      email: this.state.email,
-      role: this.state.role,
-      image: this.state.image,
-    }
-    axios.post(`http://localhost:8080/adduser`, data).then((res) => {
-      console.log('RESPONSE = ', res)
-      console.log(res.message)
-      if (res.data.success) {
-        alert('Added Sucessfully')
-        window.location.href = '/apps/UserList'
-      } else {
-        alert(res.data.message)
-      }
-    })
-  }
+
   onValueChange(e) {
     this.setState({
       role: e.target.value,
@@ -142,7 +125,7 @@ class UsersList extends React.Component {
           } else {
             swal("Not Deleted!");
           }
-          window.location.reload(false);
+          // window.location.reload(false);
         });
         if (res.data.success === true) {
           // window.location.href = '/apps/customers/ViewCustomers'

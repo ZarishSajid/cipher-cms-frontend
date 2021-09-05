@@ -24,24 +24,10 @@ class UpdateCustomers extends React.Component {
       city: '',
       state: '',
       telephone: '',
-      available_credit: '',
-      credit_limit: '',
-      payment_terms: '',
-      contact_name: '',
-      contact_telephone: '',
-      contact_extension: '',
-      contact_email: '',
-      contact_fax: '',
-      weight_unit: '',
-      temperature_unit: '',
-      public_notes: '',
-      private_notes: '',
       value: 'mc',
       mcInput: '',
-      distance_unit: '',
       place_name: '',
       stateList: [],
-      City: [],
       fireRedirect: false,
       redirectRoute: '',
       customerContact:[],
@@ -95,8 +81,6 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       firstname: userData && userData._id
       ? userData.firstname
       : this.state.firstname,
-
-      
       lastname: userData && userData._id
       ? userData.lastname
       : this.state.lastname,
@@ -109,9 +93,6 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       postal_code: userData && userData._id
       ? userData.postal_code
       : this.state.postal_code,
-      city: userData && userData._id
-      ? userData.city
-      : this.state.city,
       street_1: userData && userData._id
       ? userData.street_1
       : this.state.street_1,
@@ -136,9 +117,18 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       email: userData && userData._id
       ? userData.email
       : this.state.email,
+      city:userData && userData._id
+      ? userData.city
+      :this.state.city,
+      docket_number:userData && userData._id
+      ? userData.docket_number
+      :this.state.docket_number,
+     
     })
+    console.log("city from component did mount",this.state.city)
+        console.log("state from component did mount",this.state.state)
+        console.log(this.state.customer_type,"customer type  from component did mount")
   }
- 
 
  
 
@@ -148,8 +138,8 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
   }
 
   handleMcInput(event) {
-    this.setState({mcInput: event.target.value.toUpperCase()})
-    console.log('MC Input =', this.state.mcInput)
+    this.setState({docket_number: event.target.value.toUpperCase()})
+    console.log('docket =', this.state.docket_number)
 
 
   }
@@ -278,7 +268,8 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       mc_no: this.state.mc_no,
       mcInput: this.state.mcInput,
       email:this.state.email,
-      customer_type:this.state.customer_type
+      customer_type:this.state.customer_type,
+      docket_number:this.state.docket_number
       
     }
     axios.put(`http://localhost:8080/api/update_new_customer/${id}`, data).then((res) => {
@@ -814,10 +805,10 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                 <div className='col-md-12 fv-row'>
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2'>MC Number</label>
+                      <label className=' fs-6 fw-bold form-label mb-2'>MC/FF/MX Number</label>
 
                       <div className='input-group mb-3'>
-                        <div className='input-group-prepend'>
+                        {/* <div className='input-group-prepend'>
                           <select
                             onChange={this.handleMcNumber}
                             value={this.state.mc_no}
@@ -833,9 +824,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                             <option value='FF'>FF</option>
                             <option value='FX'>FX</option>
                           </select>{' '}
-                        </div>
+                        </div> */}
                         <input
-                          value={this.state.mcInput}
+                          value={this.state.docket_number}
                           onChange={this.handleMcInput}
                           type='text'
                           className='form-control form-control-solid'
