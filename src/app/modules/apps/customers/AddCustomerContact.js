@@ -123,15 +123,15 @@ class AddCustomerContact extends React.Component {
       console.log(res.message)
       if (res.data.success) {
         swal({
-          text: " Saved Sucessfully!",
+          text: "Saved Sucessfully!",
           icon: "success",
-        });
-        console.log('data', res.data.message)
-        //  window.location.href = '/apps/customers/CustomizeUnit'
-        this.props.history.push({ 
-          pathname: '/apps/customers/CustomizeUnit',
-          // aboutProps:{userData}
-        });
+          timer: 800,
+        
+        })
+      this.props.history.push({ 
+        pathname: '/apps/customers/CustomizeUnit',
+       }
+        );
       } else {
         swal({
           text: res.data.message,
@@ -234,7 +234,7 @@ class AddCustomerContact extends React.Component {
                   </div>
 
                   <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                    <label className='form-label '>Name</label>
+                    <label className='form-label text-dark fw-bolder '>Name</label>
 
                     <input
                       type='text'
@@ -249,7 +249,7 @@ class AddCustomerContact extends React.Component {
                   <br />
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2'>Telephone</label>
+                      <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Telephone</label>
 
                       <input
                         value={this.state.contact_telephone}
@@ -262,7 +262,7 @@ class AddCustomerContact extends React.Component {
                     </div>
 
                     <div className='col-6'>
-                      <label className='fs-6 fw-bold form-label mb-2'>Ext</label>
+                      <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Ext</label>
 
                       <input
                         value={this.state.contact_extension}
@@ -285,7 +285,7 @@ class AddCustomerContact extends React.Component {
                   <br />
                   <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                     <br />
-                    <label className='form-label'>Email</label>
+                    <label className='form-label text-dark fw-bolder'>Email</label>
                     <input
                       type='email'
                       value={this.state.contact_email}
@@ -298,7 +298,7 @@ class AddCustomerContact extends React.Component {
               </div>
               <br />
               <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                <label className='form-label '>Fax</label>
+                <label className='form-label text-dark fw-bolder'>Fax</label>
               </div>
               <div className='input-group'>
                 <input

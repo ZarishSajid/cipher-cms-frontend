@@ -162,7 +162,7 @@ class UpdateAccounting extends React.Component {
                     </div>
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label '>Credit Limit</label>
+                      <label className='form-label form-label text-dark fw-bolder '>Credit Limit</label>
 
                       <input
                         type='text'
@@ -175,7 +175,7 @@ class UpdateAccounting extends React.Component {
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label '>Available Credit</label>
+                      <label className='form-label form-label text-dark fw-bolder '>Available Credit</label>
 
                       <input
                         type='text'
@@ -189,7 +189,7 @@ class UpdateAccounting extends React.Component {
                 </div>
                 <br />
                 <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                  <label className='form-label '>Payment Terms</label>
+                  <label className='form-label form-label text-dark fw-bolder '>Payment Terms</label>
                   <div className='input-group'>
                     <input
                       type='text'
@@ -208,7 +208,7 @@ class UpdateAccounting extends React.Component {
 
                 <br />
                 <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                  <label className='form-label '>Credit Hold</label>
+                  <label className='form-label form-label text-dark fw-bolder '>Credit Hold</label>
                 </div>
                 <div className='d-flex fv-row'>
                   <div className='radio'>

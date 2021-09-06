@@ -64,7 +64,7 @@ class UpdateCustomerContact extends React.Component {
   }
   closeModal = () => this.setState({isOpen: false})
   saveContactList(e) {
-    // const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
+     const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
     console.log("userr data in modal",this.state.data)
 
     var id = this.state.data[0].customer_id
@@ -86,8 +86,9 @@ class UpdateCustomerContact extends React.Component {
           icon: 'success',
         })
         console.log('data', res.data.message)
-
-        //  window.location.href = '/apps/customers/UpdateCustomizeUnit'
+          this.props.history.push({ 
+          aboutProps:{userData}});
+        //  window.location.href = '/apps/customers/UpdateCustomerContact'
       } else {
         swal({
           text: res.data.message,

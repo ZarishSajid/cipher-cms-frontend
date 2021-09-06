@@ -249,7 +249,7 @@ class UsersList extends React.Component {
     <li className='list-color'>To help you get you started, download our example template.<br/><a class="btn btn-xs btn-primary" href="https://s3.amazonaws.com/imgfs/docs/carrier-import.xlsx" target="_blank"><i class="fa fa-download"></i> Download</a></li>
     <li className='list-color'>If you already have an Excel spreadsheet or Comma-separated file, you may upload that as well.</li>
     <li className='list-color'>Each row should contain a different carrier.</li>
-    <li className='list-color'>Columns will be mapped in upcoming steps.</li>
+    <li className='list-color'>Columns wilFd be mapped in upcoming steps.</li>
   </ul>
   <div class="panel-footer">
     <div class="row fileupload-buttonbar">

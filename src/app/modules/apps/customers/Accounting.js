@@ -54,7 +54,6 @@ class UsersList extends React.Component {
 
   saveAccountingDetail = (e) => {
     var id = localStorage.getItem('id')
-    
      console.log(id, 'id inside save accounting details')
     const data = {
       available_credit: this.state.available_credit,
@@ -67,11 +66,14 @@ class UsersList extends React.Component {
       console.log(res.message)
       if (res.data.success) {
         swal({
-          text: " Saved Sucessfully!",
+          text: "Saved Sucessfully!",
           icon: "success",
-        });
-        console.log('data', res.data.message)
-        window.location.href = '/apps/customers/CustomerContact'
+          timer: 800,
+        
+        })
+      this.props.history.push({ 
+        pathname: '/apps/customers/CustomerContact',
+      });
       } else {
         swal({
           text: res.data.message,
@@ -79,7 +81,6 @@ class UsersList extends React.Component {
         });      }
     })
   }
-
   render() {
     const {stateList} = this.state
     return (
@@ -133,7 +134,7 @@ class UsersList extends React.Component {
                     </div>
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label '>Credit Limit</label>
+                      <label className='form-label text-dark fw-bolder'>Credit Limit</label>
 
                       <input
                         type='text'
@@ -147,7 +148,7 @@ class UsersList extends React.Component {
                     </div>
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label '>Available Credit</label>
+                      <label className='form-label text-dark fw-bolder '>Available Credit</label>
 
                       <input
                         type='text'
@@ -163,7 +164,7 @@ class UsersList extends React.Component {
                 </div>
                 <br />
                 <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                  <label className='form-label '>Payment Terms</label>
+                  <label className='form-label text-dark fw-bolder '>Payment Terms</label>
                   <div className='input-group'>
                     <input
                       type='text'
@@ -182,7 +183,7 @@ class UsersList extends React.Component {
 
                 <br />
                 <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                  <label className='form-label '>Credit Hold</label>
+                  <label className='form-label text-dark fw-bolder'>Credit Hold</label>
                 </div>
                 <div className='d-flex fv-row'>
                   <div className='radio'>

@@ -5,9 +5,10 @@ import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
-import {Link} from 'react-router-dom'
+import {Link,Redirect} from 'react-router-dom'
 import swal from 'sweetalert';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 class UpdateCustomers extends React.Component {
   constructor(props) {
     super(props)
@@ -34,6 +35,8 @@ class UpdateCustomers extends React.Component {
       email:'',
       id:'',
       customer_type:'',
+      redirect: false
+
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -57,7 +60,7 @@ console.log("user data in update customer",userData)
 this.setState({
   id:userData._id
 })
-    console.log("id inside componentt did mount ****",userData._id)
+  console.log("id inside componentt did mount ****",userData._id)
 
 axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).then((res) => {
       console.log('RESPONSE = ', res)
@@ -276,17 +279,20 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-        swal({
-          text: " Updated Sucessfully!",
-          icon: "success",
-        });
-        console.log('data', res.data.message)
+          swal({
+            text: "Updated Sucessfully!",
+            icon: "success",
+            timer: 800,
+          
+          })
+          
+// console.log('data', res.data.message)
         this.props.history.push({ 
           pathname: '/apps/customers/UpdateAccounting',
           aboutProps:{userData}});
       } else {
         swal({
-          text: res.data.message,
+          text: "Error",
           icon: "error",
         });  
       }
@@ -299,6 +305,8 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
     this.props.location &&
     this.props.location.aboutProps &&
     this.props.location.aboutProps.userData;
+   
+
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
@@ -352,7 +360,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                     </div>
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label required'>First Name</label>
+                      <label className='form-label text-dark fw-bolder required'>First Name</label>
                       
                       <input
                        type="text"
@@ -367,7 +375,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label required'>Last Name</label>
+                      <label className='form-label form-label text-dark fw-bolder required'>Last Name</label>
 
                       <input
                         value={this.state.lastname}
@@ -379,7 +387,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
  <div className='col-md-12 fv-row'>
                       <div className='row fv-row fv-plugins-icon-container'>
                         <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label mb-2'>Email</label>
+                          <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>Email</label>
 
                           <input
                             value={this.state.email}
@@ -392,7 +400,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         </div>
 
                         <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label mb-2'>Customer Type</label>
+                          <label className='fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>Customer Type</label>
 
                           
                           <div className='input-group-prepend'>
@@ -424,7 +432,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label required'>Telephone</label>
+                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>Telephone</label>
                       <input
                         value={this.state.telephone}
                         onChange={this.handleTelephone}
@@ -436,7 +444,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label required'>Country</label>
+                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>Country</label>
                       {/* <input
                         value={this.state.country}
                         onChange={this.handleCountry}
@@ -703,7 +711,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='col-md-8 fv-row'>
                         <div className='row fv-row fv-plugins-icon-container'>
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2'>Postal Code</label>
+                            <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Postal Code</label>
 
                             <input
                               value={this.state.postal_code}
@@ -716,7 +724,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                           </div>
 
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2'>City</label>
+                            <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required '>City</label>
 
                             <select
                               type='text'
@@ -740,7 +748,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       </div>
 
                       <div className='col-4'>
-                        <label className=' fs-6 fw-bold form-label mb-2'>State</label>
+                        <label className=' fs-6 fw-bold form-label form-label text-dark fw-bolder required mb-2'>State</label>
 
                         <select
                           type='text'
@@ -765,7 +773,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                     <div className='col-md-12 fv-row'>
                       <div className='row fv-row fv-plugins-icon-container'>
                         <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label mb-2'>Street 1</label>
+                          <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Street 1</label>
 
                           <input
                             value={this.state.street_1}
@@ -778,7 +786,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         </div>
 
                         <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label mb-2'>Street 2</label>
+                          <label className='fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Street 2</label>
 
                           <input
                             value={this.state.street_2}
@@ -805,7 +813,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                 <div className='col-md-12 fv-row'>
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2'>MC/FF/MX Number</label>
+                      <label className=' fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>MC/FF/MX Number</label>
 
                       <div className='input-group mb-3'>
                         {/* <div className='input-group-prepend'>
@@ -837,7 +845,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                     </div>
 
                     <div className='col-6'>
-                      <label className='fs-6 fw-bold form-label mb-2'>USDOT Number</label>
+                      <label className='fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>USDOT Number</label>
 
                       <input
                         value={this.state.usdot_no}
@@ -937,6 +945,8 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         </svg>
                       </span>
                     </button>
+                            <ToastContainer />
+
                   </div>
                 </div>
                 <div></div>

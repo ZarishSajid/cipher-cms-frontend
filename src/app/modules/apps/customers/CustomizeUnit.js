@@ -71,12 +71,16 @@ class UsersList extends React.Component {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
+       
         swal({
           text: " New Customer Added Sucessfully!",
           icon: "success",
-        });
-        window.location.href = '/apps/customers/AddCustomers'
-
+          timer: 800,
+        
+        })
+      this.props.history.push({ 
+        pathname: '/apps/customers/AddCustomers',
+       });
         console.log('data', res.data.message)
       } else {
         swal({
@@ -140,7 +144,7 @@ const {stateList}=this.state
                 <div className='col-md-12 fv-row'>
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-12'>
-                      <label className=' fs-6 fw-bold form-label mb-2'>Weight Unit</label>
+                      <label className=' form-label text-dark fw-bolder'>Weight Unit</label>
 
                       <select
                         type='text'
@@ -165,7 +169,7 @@ const {stateList}=this.state
 
                     <div className='col-12'>
                       <br />
-                      <label className=' fs-6 fw-bold form-label mb-2'>Distance Unit</label>
+                      <label className=' form-label text-dark fw-bolder'>Distance Unit</label>
 
                       <select
                         type='text'
@@ -190,7 +194,7 @@ const {stateList}=this.state
 
                     <div className='col-12'>
                       <br />
-                      <label className=' fs-6 fw-bold form-label mb-2'>Temperature Unit</label>
+                      <label className='form-label text-dark fw-bolder'>Temperature Unit</label>
 
                       <select
                         type='text'
@@ -215,7 +219,7 @@ const {stateList}=this.state
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                       <br />
 
-                      <label className='form-label'>Private Notes</label>
+                      <label className='form-label text-dark fw-bolder'>Private Notes</label>
 
                       <textarea
                         type='text'
@@ -233,7 +237,7 @@ const {stateList}=this.state
                       </div>
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label'>Public Notes</label>
+                      <label className='form-label text-dark fw-bolder'>Public Notes</label>
 
                       <textarea
                         type='text'

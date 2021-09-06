@@ -8,7 +8,12 @@ import {AiTwotoneEdit} from 'react-icons/ai'
 import {Link} from 'react-router-dom'
 import {BsUnlockFill} from 'react-icons/bs'
 import {BsLockFill} from 'react-icons/bs'
-import swal from 'sweetalert';
+import swal from 'sweetalert'
+import {AiOutlineDownload} from 'react-icons/ai'
+import jsPDF from 'jspdf'
+import 'jspdf-autotable'
+import html2canvas from 'html2canvas';  
+
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -25,35 +30,50 @@ class UsersList extends React.Component {
       available_credit: '',
       data: [],
       isLoading: true,
+      reload: false,
     }
+    this.refreshPage = this.refreshPage.bind(this)
+  }
+  refreshPage() {
+    console.log('page refresh')
+    axios
+      .get(`http://localhost:8080/api/get_customer_list`)
+
+      .then((res) => {
+        console.log('RESPONSE = ', res.data.data)
+        this.setState({isLoading: false, data: res.data.data})
+        console.log('view customer data', this.state.data)
+
+        console.log(res.message)
+      })
+  }
+  componentDidMount() {
+    this.fetchData()
   }
   block(e, id) {
     e.preventDefault()
     axios.put(`http://localhost:8080/api/block_one_customer/${id}`).then((res) => {
       swal({
-        text: " Blocked Sucessfully!",
-        icon: "success",
-      });    
-    
-      window.location.reload(false);
-
+        text: ' Blocked Sucessfully!',
+        icon: 'success',
+        timer: 800,
+      })
     })
+    // data reloading
+    this.refreshPage()
   }
-  unblock(e, id) {
-    e.preventDefault();
+  async unblock(e, id) {
+    e.preventDefault()
 
-    console.log("token in active", localStorage.getItem("token"));
-
-    axios.put(`http://localhost:8080/api/unblock_one_customer/${id}`).then((res) => {
+    await axios.put(`http://localhost:8080/api/unblock_one_customer/${id}`).then((res) => {
       swal({
-        text: "UnBlocked Sucessfully!",
-        icon: "success",
-      });          
-      window.location.reload(false);
-    });
-  }
-  componentDidMount() {
-    this.fetchData()
+        text: 'UnBlocked Sucessfully!',
+        icon: 'success',
+        timer: 800,
+      })
+    })
+    // data reloading
+    this.refreshPage()
   }
 
   fetchData() {
@@ -70,7 +90,7 @@ class UsersList extends React.Component {
       available_credit: this.state.available_credit,
     }
     axios
-      .get(`http://localhost:8080/api/get_customer_list`, data)
+      .get(`http://localhost:8080/api/get_customer_list`)
 
       .then((res) => {
         console.log('RESPONSE = ', res.data.data)
@@ -80,7 +100,6 @@ class UsersList extends React.Component {
         console.log(res.message)
       })
   }
-
 
   onValueChange(e) {
     this.setState({
@@ -104,36 +123,58 @@ class UsersList extends React.Component {
   deleteCustomer(e, id) {
     e.preventDefault()
     console.log('id inside delete customer')
-    axios
-      .delete(`http://localhost:8080/api/delete_one_customer/${id}`)
 
-      .then((res) => {
-        console.log('RESPONSE = ', res._id)
-        // alert('Sucesfully Deleted')
-        swal({
-          title: "Are you sure ?",
-          text: "You want to delete this!",
-          icon: "warning",
-          buttons: true,
-          dangerMode: true,
+    swal({
+      title: 'Are you sure ?',
+      text: 'You want to delete this!',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        axios
+          .delete(`http://localhost:8080/api/delete_one_customer/${id}`)
+
+          .then((res) => {
+            console.log('RESPONSE = ', res._id)
+
+
+            if (res.data.success === true) {
+              // window.location.href = '/apps/customers/ViewCustomers'
+            }
+          })
+
+        swal('Deleted Sucessfully!', {
+          icon: 'success',
         })
-        .then((willDelete) => {
-          if (willDelete) {
-            swal("Deleted Sucessfully!", {
-              icon: "success",
-            });
-          } else {
-            swal("Not Deleted!");
-          }
-          // window.location.reload(false);
-        });
-        if (res.data.success === true) {
-          // window.location.href = '/apps/customers/ViewCustomers'
-        }
-        console.log(res.message)
-      })
+      } else {
+        swal('Not Deleted!')
+      }
+      this.refreshPage()
+    })
+    
   }
-
+  exportPDF () {
+    const input = document.getElementById('pdfdiv');  
+    html2canvas(input)  
+      .then((canvas) => {  
+        var imgWidth = 300;  
+        var marginLeft = 20;
+        var marginTop=40;
+        var unit = "pt";
+        var  size = "A4"; 
+        var setFontSize=15;
+       var heightLeft=20;
+        var imgHeight = canvas.height * imgWidth / canvas.width;  
+        var heightLeft = imgHeight;  
+        const imgData = canvas.toDataURL('image/png');  
+        const pdf = new jsPDF('p', 'mm', 'a4')  
+        var position = 0;  
+        var heightLeft = imgHeight;  
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
+        pdf.save("download.pdf");  
+      });  
+  }
   render() {
     const {data} = this.state
     const {open, openActive} = this.state
@@ -263,7 +304,7 @@ class UsersList extends React.Component {
 
             <div className='card-body py-3'>
               <div className='table-responsive'>
-                <table className='table align-middle gs-0 gy-4'>
+                <table id="pdfdiv" className='table align-middle gs-0 gy-4'>
                   <thead>
                     <tr className='fw-bolder text-muted bg-light'>
                       <th className='min-w-125px'> First Name</th>
@@ -333,32 +374,31 @@ class UsersList extends React.Component {
                           </td>
 
                           <td>
-                            <a className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'>
+                            <a
+                              href='#'
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            >
                               {values.active ? (
-                              
-                                  <BsUnlockFill
-                                    style={{
-                                      marginTop: '3px',
-                                      color: 'green',
-                                      marginLeft: '10px',
-                                      height: '30px',
-                                    }}
-                                    onClick={(e) => this.block(e, values._id)}
-                                  ></BsUnlockFill>
-                                  
+                                <BsUnlockFill
+                                  style={{
+                                    marginTop: '3px',
+                                    color: 'green',
+                                    marginLeft: '10px',
+                                    height: '30px',
+                                  }}
+                                  onClick={(e) => this.block(e, values._id)}
+                                ></BsUnlockFill>
                               ) : (
-                              
-                                
-                                  <BsLockFill
-                                    onClick={(e) => this.unblock(e, values._id)}
-                                    style={{
-                                      marginTop: '3px',
-                                      color: 'red',
-                                      marginLeft: '10px',
-                                    }}
-                                  ></BsLockFill>
+                                <BsLockFill
+                                  onClick={(e) => this.unblock(e, values._id)}
+                                  style={{
+                                    marginTop: '3px',
+                                    color: 'red',
+                                    marginLeft: '10px',
+                                  }}
+                                ></BsLockFill>
                               )}
-                              </a>
+                            </a>
                             <a
                               href='#'
                               className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
@@ -401,6 +441,18 @@ class UsersList extends React.Component {
                 </table>
               </div>
             </div>
+          </div>
+          <div>
+            <a
+             onClick={() => this.exportPDF()}
+              className='btn btn-xs btn-primary'
+              target='_blank'
+            >
+              <i>
+                <AiOutlineDownload />
+              </i>{' '}
+              Download
+            </a>
           </div>
         </div>
       </div>

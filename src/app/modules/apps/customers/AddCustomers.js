@@ -140,12 +140,12 @@ handleCustomerType(event){
           .post(`http://localhost:8080/api/get_city_state`, data)
 
           .then((res) => {
-            //  console.log('RESPONSE = ', res.data.data)
+            console.log('RESPONSE = ', res.data.data)
             // console.log('City Name = ', res.data.data)
             // console.log('State Name = ', res.data.state_name)
             this.setState({isLoading: false, stateList: res.data.data})
             console.log('view state list', this.state.stateList)
-
+           
             // this.setState({ City:res.data.data});
             // console.log("City ",this.state.City);
 
@@ -204,12 +204,16 @@ console.log("console befor axios")
         console.log('data', res.data.message)
          localStorage.setItem('id', res.data.data._id)
         
-          swal({
-          text: " Saved Sucessfully!",
+         swal({
+          text: "Saved Sucessfully!",
           icon: "success",
-        });
+          timer: 800,
+        
+        })
+      this.props.history.push({ 
+        pathname: '/apps/customers/Accounting',
+       });
         console.log(" userdata in if condition",userData)
-         window.location.href = '/apps/customers/Accounting'
       } else {
         console.log("else response",res)
         swal({
@@ -273,7 +277,7 @@ console.log("console befor axios")
                     </div>
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label required'>First Name</label>
+                      <label className='form-label required text-dark fw-bolder'>First Name</label>
 
                       <input
                         value={this.state.firstname}
@@ -285,7 +289,7 @@ console.log("console befor axios")
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label required'>Last Name</label>
+                      <label className='form-label required text-dark fw-bolder'>Last Name</label>
 
                       <input
                         value={this.state.lastname}
@@ -297,7 +301,7 @@ console.log("console befor axios")
  <div className='col-md-12 fv-row'>
                       <div className='row fv-row fv-plugins-icon-container'>
                         <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label mb-2'>Email</label>
+                          <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Email</label>
 
                           <input
                             value={this.state.email}
@@ -310,7 +314,7 @@ console.log("console befor axios")
                         </div>
 
                         <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label mb-2'>Customer Type</label>
+                          <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Customer Type</label>
 
                           
                           <div className='input-group-prepend'>
@@ -342,7 +346,7 @@ console.log("console befor axios")
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label required'>Telephone</label>
+                      <label className='fs-6 fw-bold form-label required text-dark fw-bolder'>Telephone</label>
                       <input
                         value={this.state.telephone}
                         onChange={this.handleTelephone}
@@ -354,7 +358,7 @@ console.log("console befor axios")
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label required'>Country</label>
+                      <label className='fs-6 fw-bold form-label required text-dark fw-bolder'>Country</label>
                       {/* <input
                         value={this.state.country}
                         onChange={this.handleCountry}
@@ -621,7 +625,7 @@ console.log("console befor axios")
                       <div className='col-md-8 fv-row'>
                         <div className='row fv-row fv-plugins-icon-container'>
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2'>Postal Code</label>
+                            <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Postal Code</label>
 
                             <input
                               value={this.state.postal_code}
@@ -634,7 +638,7 @@ console.log("console befor axios")
                           </div>
 
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2'>City</label>
+                            <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>City</label>
 
                             <select
                               type='text'
@@ -658,7 +662,7 @@ console.log("console befor axios")
                       </div>
 
                       <div className='col-4'>
-                        <label className=' fs-6 fw-bold form-label mb-2'>State</label>
+                        <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>State</label>
 
                         <select
                           type='text'
@@ -683,7 +687,7 @@ console.log("console befor axios")
                     <div className='col-md-12 fv-row'>
                       <div className='row fv-row fv-plugins-icon-container'>
                         <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label mb-2'>Street 1</label>
+                          <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Street 1</label>
 
                           <input
                             value={this.state.street_1}
@@ -696,7 +700,7 @@ console.log("console befor axios")
                         </div>
 
                         <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label mb-2'>Street 2</label>
+                          <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>Street 2</label>
 
                           <input
                             value={this.state.street_2}
@@ -723,7 +727,7 @@ console.log("console befor axios")
                 <div className='col-md-12 fv-row'>
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2'>MC Number</label>
+                      <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>MC Number</label>
 
                       <div className='input-group mb-3'>
                         <div className='input-group-prepend'>
@@ -755,7 +759,7 @@ console.log("console befor axios")
                     </div>
 
                     <div className='col-6'>
-                      <label className='fs-6 fw-bold form-label mb-2'>USDOT Number</label>
+                      <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>USDOT Number</label>
 
                       <input
                         value={this.state.usdot_no}
