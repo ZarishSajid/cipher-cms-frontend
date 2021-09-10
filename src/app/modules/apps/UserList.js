@@ -895,13 +895,13 @@ class UsersList extends React.Component {
                               <div className='d-flex fv-row'>
                                 <div className='radio'>
                                   <input
-                                    className='form-check-input me-3'
+                                    className='form-check-input me-4'
                                     type='radio'
                                     value='Administrator'
                                     checked={this.state.role === 'Administrator'}
                                     onChange={this.onValueChange}
                                   />
-                                  <label>Administrator</label>
+                                  <label className='margin-left'>  Administrator</label>
                                 </div>
                               </div>
                               <div className='separator separator-dashed my-5'></div>
@@ -914,7 +914,7 @@ class UsersList extends React.Component {
                                   checked={this.state.role === 'Developer'}
                                   onChange={this.onValueChange}
                                 />
-                                <label className=' mx-auto'>Developer</label>
+                                <label className='margin-left'>Developer</label>
                               </div>
                               <div className='separator separator-dashed my-5'></div>
 
@@ -926,7 +926,7 @@ class UsersList extends React.Component {
                                   checked={this.state.role === 'Analyst'}
                                   onChange={this.onValueChange}
                                 />
-                                <label className=' mx-auto'>Analyst</label>
+                                <label className='margin-left'>Analyst</label>
                               </div>
                               <div className='separator separator-dashed my-5'></div>
 
@@ -938,19 +938,19 @@ class UsersList extends React.Component {
                                   checked={this.state.role === 'Support'}
                                   onChange={this.onValueChange}
                                 />
-                                <label className=' mx-auto'>Support</label>
+                                <label className='margin-left'>Support</label>
                               </div>
                               <div className='separator separator-dashed my-5'></div>
 
-                              <div className='radio'>
+                              <div className='radio '>
                                 <input
-                                  className='form-check-input me-3'
+                                  className='form-check-input me-3 '
                                   type='radio'
                                   value='Trial'
                                   checked={this.state.role === 'Trial'}
                                   onChange={this.onValueChange}
                                 />
-                                <label className=' mx-auto'>Trial</label>
+                                <label>Trial</label>
                               </div>
                             </div>
 

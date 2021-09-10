@@ -49,11 +49,12 @@ class UpdateAccounting extends React.Component {
     this.props.location &&
     this.props.location.aboutProps &&
     this.props.location.aboutProps.userData;
-  //  var id = this.state.id
+    // this.setState({
+    //   id:userData._id
+    // })
     
+    var id = this.state.id
   //    console.log(id, 'id inside save accounting details')
-  const id = localStorage.getItem("customer_id");
-
     const data = {
       available_credit: this.state.available_credit,
       credit_limit: this.state.credit_limit,
@@ -71,7 +72,7 @@ class UpdateAccounting extends React.Component {
         console.log('data', res.data.message)
         this.props.history.push({ 
  pathname: '/apps/customers/UpdateCustomerContact',
- aboutProps:{userData}});
+   aboutProps:{userData}});
         //  window.location.href = '/apps/customers/UpdateCustomerContact'
       } else {
         swal({

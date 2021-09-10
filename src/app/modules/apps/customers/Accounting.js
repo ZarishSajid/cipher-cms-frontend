@@ -194,7 +194,7 @@ class UsersList extends React.Component {
                       checked={this.state.credit_hold === 'credit_hold_enable'}
                       onChange={this.onValueChange}
                     />
-                    <label>Credit Hold Enable</label>
+                    <label className='margin-left'>Credit Hold Enable</label>
                   </div>
                 </div>
                 <div className='separator separator-dashed my-5'></div>
@@ -206,7 +206,7 @@ class UsersList extends React.Component {
                     checked={this.state.credit_hold === 'credit_hold_disable'}
                     onChange={this.onValueChange}
                   />
-                  <label className=' mx-auto'>Credit Hold Disable</label>
+                  <label className='  margin-left'>Credit Hold Disable</label>
                 </div>
                 <br />
 

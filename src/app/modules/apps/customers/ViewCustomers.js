@@ -12,8 +12,7 @@ import swal from 'sweetalert'
 import {AiOutlineDownload} from 'react-icons/ai'
 import jsPDF from 'jspdf'
 import 'jspdf-autotable'
-import html2canvas from 'html2canvas';  
-
+import html2canvas from 'html2canvas'
 class UsersList extends React.Component {
   constructor(props) {
     super(props)
@@ -42,7 +41,7 @@ class UsersList extends React.Component {
       .then((res) => {
         console.log('RESPONSE = ', res.data.data)
         this.setState({isLoading: false, data: res.data.data})
-        console.log('view customer data', this.state.data)
+        console.log('view customer data Api', this.state.data)
 
         console.log(res.message)
       })
@@ -64,7 +63,6 @@ class UsersList extends React.Component {
   }
   async unblock(e, id) {
     e.preventDefault()
-
     await axios.put(`http://localhost:8080/api/unblock_one_customer/${id}`).then((res) => {
       swal({
         text: 'UnBlocked Sucessfully!',
@@ -89,18 +87,14 @@ class UsersList extends React.Component {
       docket_number: this.state.docket_number,
       available_credit: this.state.available_credit,
     }
-    axios
-      .get(`http://localhost:8080/api/get_customer_list`)
+    axios.get(`http://localhost:8080/api/get_customer_list`).then((res) => {
+      console.log('RESPONSE = ', res.data.data)
+      this.setState({isLoading: false, data: res.data.data})
+      console.log('view customer data', this.state.data)
 
-      .then((res) => {
-        console.log('RESPONSE = ', res.data.data)
-        this.setState({isLoading: false, data: res.data.data})
-        console.log('view customer data', this.state.data)
-
-        console.log(res.message)
-      })
+      console.log(res.message)
+    })
   }
-
   onValueChange(e) {
     this.setState({
       role: e.target.value,
@@ -132,17 +126,12 @@ class UsersList extends React.Component {
       dangerMode: true,
     }).then((willDelete) => {
       if (willDelete) {
-        axios
-          .delete(`http://localhost:8080/api/delete_one_customer/${id}`)
-
-          .then((res) => {
-            console.log('RESPONSE = ', res._id)
-
-
-            if (res.data.success === true) {
-              // window.location.href = '/apps/customers/ViewCustomers'
-            }
-          })
+        axios.delete(`http://localhost:8080/api/delete_one_customer/${id}`).then((res) => {
+          console.log('RESPONSE = ', res._id)
+          if (res.data.success === true) {
+            // window.location.href = '/apps/customers/ViewCustomers'
+          }
+        })
 
         swal('Deleted Sucessfully!', {
           icon: 'success',
@@ -152,28 +141,26 @@ class UsersList extends React.Component {
       }
       this.refreshPage()
     })
-    
   }
-  exportPDF () {
-    const input = document.getElementById('pdfdiv');  
-    html2canvas(input)  
-      .then((canvas) => {  
-        var imgWidth = 300;  
-        var marginLeft = 20;
-        var marginTop=40;
-        var unit = "pt";
-        var  size = "A4"; 
-        var setFontSize=15;
-       var heightLeft=20;
-        var imgHeight = canvas.height * imgWidth / canvas.width;  
-        var heightLeft = imgHeight;  
-        const imgData = canvas.toDataURL('image/png');  
-        const pdf = new jsPDF('p', 'mm', 'a4')  
-        var position = 0;  
-        var heightLeft = imgHeight;  
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);  
-        pdf.save("download.pdf");  
-      });  
+  exportPDF() {
+    const input = document.getElementById('pdfdiv')
+    html2canvas(input).then((canvas) => {
+      var imgWidth = 300
+      var marginLeft = 20
+      var marginTop = 40
+      var unit = 'pt'
+      var size = 'A4'
+      var setFontSize = 15
+      var heightLeft = 20
+      var imgHeight = (canvas.height * imgWidth) / canvas.width
+      var heightLeft = imgHeight
+      const imgData = canvas.toDataURL('image/png')
+      const pdf = new jsPDF('p', 'mm', 'a4')
+      var position = 0
+      var heightLeft = imgHeight
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight)
+      pdf.save('download.pdf')
+    })
   }
   render() {
     const {data} = this.state
@@ -190,39 +177,6 @@ class UsersList extends React.Component {
         <div className='content d-flex flex-column flex-column-fluid' id='kt_content'>
           <div className='toolbar' id='kt_toolbar'>
             <div id='kt_toolbar_container' className='container-fluid d-flex flex-stack'>
-              <div
-                data-kt-swapper='true'
-                data-kt-swapper-mode='prepend'
-                data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}"
-                className='page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0'
-              >
-                <h1 className='d-flex align-items-center text-dark fw-bolder fs-3 my-1'>
-                  Users List
-                </h1>
-                <span className='h-20px border-gray-200 border-start mx-4'></span>
-                <ul className='breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1'>
-                  <li className='breadcrumb-item text-muted'>
-                    <a
-                      href='/metronic8/demo1/../demo1/index.html'
-                      className='text-muted text-hover-primary'
-                    >
-                      Home
-                    </a>
-                  </li>
-                  <li className='breadcrumb-item'>
-                    <span className='bullet bg-gray-200 w-5px h-2px'></span>
-                  </li>
-                  <li className='breadcrumb-item text-muted'>User Management</li>
-                  <li className='breadcrumb-item'>
-                    <span className='bullet bg-gray-200 w-5px h-2px'></span>
-                  </li>
-                  <li className='breadcrumb-item text-muted'>Users</li>
-                  <li className='breadcrumb-item'>
-                    <span className='bullet bg-gray-200 w-5px h-2px'></span>
-                  </li>
-                  <li className='breadcrumb-item text-dark'>Users List</li>
-                </ul>
-              </div>
               <h5>Customer List</h5>
             </div>
           </div>
@@ -304,7 +258,7 @@ class UsersList extends React.Component {
 
             <div className='card-body py-3'>
               <div className='table-responsive'>
-                <table id="pdfdiv" className='table align-middle gs-0 gy-4'>
+                <table id='pdfdiv' className='table align-middle gs-0 gy-4'>
                   <thead>
                     <tr className='fw-bolder text-muted bg-light'>
                       <th className='min-w-125px'> First Name</th>
@@ -316,7 +270,7 @@ class UsersList extends React.Component {
                       <th className='min-w-150px'>Docket Number</th>
                       <th className='min-w-150px'>Postal Code</th>
                       <th className='min-w-150px'>Status</th>
-                      <th className='min-w-150px'>Actions</th>
+                      <th className='min-w-200px'>Actions</th>
                       <th className='min-w-200px text-end rounded-end'></th>
                     </tr>
                   </thead>
@@ -374,31 +328,27 @@ class UsersList extends React.Component {
                           </td>
 
                           <td>
+                            
                             <a
                               href='#'
                               className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
                             >
                               {values.active ? (
                                 <BsUnlockFill
-                                  style={{
-                                    marginTop: '3px',
-                                    color: 'green',
-                                    marginLeft: '10px',
-                                    height: '30px',
-                                  }}
+                                  className='unblock-icon'
                                   onClick={(e) => this.block(e, values._id)}
                                 ></BsUnlockFill>
                               ) : (
                                 <BsLockFill
                                   onClick={(e) => this.unblock(e, values._id)}
-                                  style={{
-                                    marginTop: '3px',
-                                    color: 'red',
-                                    marginLeft: '10px',
-                                  }}
+                                  className='block-icon'
                                 ></BsLockFill>
                               )}
                             </a>
+
+
+                            
+                            
                             <a
                               href='#'
                               className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
@@ -411,14 +361,15 @@ class UsersList extends React.Component {
                               >
                                 <button
                                   className='btn btn-icon btn-active-light-primary w-30px h-30px'
-                                  data-kt-permissions-table-filter='delete_row'
+                                  data-kt-permissions-table-filter='edit_row'
                                 >
                                   <span>
                                     <AiTwotoneEdit className='edit-icon' />
                                   </span>
                                 </button>
                               </Link>
-                            </a>
+                            </a>                    
+
                             <a
                               href='#'
                               className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
@@ -433,6 +384,24 @@ class UsersList extends React.Component {
                                 </span>
                               </button>
                             </a>
+                            <a
+                              href='#'
+                              className='btn btn-icon btn-bg-light btn-active-color-primary btn-sm me-1'
+                            >
+                              <button
+                               data-toggle="tooltip" data-placement="top" title="download"
+                                onClick={(e) => this.deleteCustomer(e, values._id)}
+                                className='btn btn-icon btn-active-light-primary w-30px h-30px'
+                                data-kt-permissions-table-filter='delete_row'
+                              >
+                                <span>
+                                  <AiOutlineDownload className='delete-icon' />
+                                </span>
+                              </button>
+                            </a>
+                          
+                          
+                            
                           </td>
                         </tr>
                       )
@@ -442,18 +411,14 @@ class UsersList extends React.Component {
               </div>
             </div>
           </div>
-          <div>
-            <a
-             onClick={() => this.exportPDF()}
-              className='btn btn-xs btn-primary'
-              target='_blank'
-            >
+          {/* <div>
+            <a onClick={() => this.exportPDF()} className='btn btn-xs btn-primary' target='_blank'>
               <i>
                 <AiOutlineDownload />
               </i>{' '}
               Download
             </a>
-          </div>
+          </div> */}
         </div>
       </div>
     )

@@ -5,10 +5,10 @@ import axios from 'axios'
 import {KTSVG} from '../../../../_metronic/helpers'
 import {Field, ErrorMessage} from 'formik'
 import '../index.css'
-import {Link,Redirect} from 'react-router-dom'
-import swal from 'sweetalert';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import {Link, Redirect} from 'react-router-dom'
+import swal from 'sweetalert'
+import {ToastContainer, toast} from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 class UpdateCustomers extends React.Component {
   constructor(props) {
     super(props)
@@ -20,7 +20,6 @@ class UpdateCustomers extends React.Component {
       street_2: '',
       usdot_no: '',
       mc_no: '',
-      mcInput: '',
       postal_code: '',
       city: '',
       state: '',
@@ -31,12 +30,11 @@ class UpdateCustomers extends React.Component {
       stateList: [],
       fireRedirect: false,
       redirectRoute: '',
-      customerContact:[],
-      email:'',
-      id:'',
-      customer_type:'',
-      redirect: false
-
+      customerContact: [],
+      email: '',
+      id: '',
+      customer_type: '',
+      redirect: false,
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -49,91 +47,53 @@ class UpdateCustomers extends React.Component {
     this.handlePostalCode = this.handlePostalCode.bind(this)
     this.handleCity = this.handleCity.bind(this)
     this.handleState = this.handleState.bind(this)
-    this.handleTelephone = this.handleTelephone.bind(this)  
+    this.handleTelephone = this.handleTelephone.bind(this)
     this.handleMcInput = this.handleMcInput.bind(this)
-    this.handleEmail=this.handleEmail.bind(this)
-    this.handleCustomerType=this.handleCustomerType.bind(this)
+    this.handleEmail = this.handleEmail.bind(this)
+    this.handleCustomerType = this.handleCustomerType.bind(this)
   }
   componentDidMount() {
-const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
-console.log("user data in update customer",userData)
-this.setState({
-  id:userData._id
-})
-  console.log("id inside componentt did mount ****",userData._id)
-
-axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).then((res) => {
+    const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
+    console.log('user data in update customer', userData)
+    this.setState({
+      id: userData._id,
+    })
+    console.log('id inside componentt did mount ****', userData._id)
+    axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).then((res) => {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-        //  aboutProps: { customerContact}
         this.setState({
-          customerContact:res.data.data
+          customerContact: res.data.data,
         })
-        console.log(' if res for customer contact',this.state.customerContact)
-        userData.customerContact=this.state.customerContact
-        console.log(' if res for user data',userData)
-
+        console.log(' if res for customer contact', this.state.customerContact)
+        userData.customerContact = this.state.customerContact
+        console.log(' if res for user data', userData)
       } else {
         console.log(' else response for customer list', res)
-
       }
     })
     this.setState({
-      
-      firstname: userData && userData._id
-      ? userData.firstname
-      : this.state.firstname,
-      lastname: userData && userData._id
-      ? userData.lastname
-      : this.state.lastname,
-      telephone: userData && userData._id
-      ? userData.telephone
-      : this.state.telephone,
-      country: userData && userData._id
-      ? userData.country
-      : this.state.country,
-      postal_code: userData && userData._id
-      ? userData.postal_code
-      : this.state.postal_code,
-      street_1: userData && userData._id
-      ? userData.street_1
-      : this.state.street_1,
-      street_2: userData && userData._id
-      ? userData.street_2
-      : this.state.street_2,
-      mc_no: userData && userData._id
-      ? userData.mc_no
-      : this.state.mc_no,
-      mcInput: userData && userData._id
-      ? userData.mcInput
-      : this.state.mcInput,
-      state: userData && userData._id
-      ? userData.state
-      : this.state.state,
-      usdot_no: userData && userData._id
-      ? userData.usdot_no
-      : this.state.usdot_no,
-    customer_type: userData && userData._id
-      ? userData.customer_type
-      : this.state.customer_type,
-      email: userData && userData._id
-      ? userData.email
-      : this.state.email,
-      city:userData && userData._id
-      ? userData.city
-      :this.state.city,
-      docket_number:userData && userData._id
-      ? userData.docket_number
-      :this.state.docket_number,
-     
+      firstname: userData && userData._id ? userData.firstname : this.state.firstname,
+      lastname: userData && userData._id ? userData.lastname : this.state.lastname,
+      telephone: userData && userData._id ? userData.telephone : this.state.telephone,
+      country: userData && userData._id ? userData.country : this.state.country,
+      postal_code: userData && userData._id ? userData.postal_code : this.state.postal_code,
+      street_1: userData && userData._id ? userData.street_1 : this.state.street_1,
+      street_2: userData && userData._id ? userData.street_2 : this.state.street_2,
+      mc_no: userData && userData._id ? userData.mc_no : this.state.mc_no,
+      mcInput: userData && userData._id ? userData.mcInput : this.state.mcInput,
+      state: userData && userData._id ? userData.state : this.state.state,
+      usdot_no: userData && userData._id ? userData.usdot_no : this.state.usdot_no,
+      customer_type: userData && userData._id ? userData.customer_type : this.state.customer_type,
+      email: userData && userData._id ? userData.email : this.state.email,
+      city: userData && userData._id ? userData.city : this.state.city,
+      docket_number: userData && userData._id ? userData.docket_number : this.state.docket_number,
     })
-    console.log("city from component did mount",this.state.city)
-        console.log("state from component did mount",this.state.state)
-        console.log(this.state.customer_type,"customer type  from component did mount")
+    console.log('city from component did mount', this.state.city)
+    console.log('state from component did mount', this.state.state)
+    console.log(this.state.customer_type, 'customer type  from component did mount')
   }
-
- 
 
   handleMcNumber(event) {
     this.setState({mc_no: event.target.value})
@@ -143,15 +103,13 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
   handleMcInput(event) {
     this.setState({docket_number: event.target.value.toUpperCase()})
     console.log('docket =', this.state.docket_number)
-
-
   }
- 
+
   handleFirstName(e) {
     this.setState({
-     firstname: e.target.value.toUpperCase()
+      firstname: e.target.value.toUpperCase(),
     })
-    
+
     console.log('First Name =', this.state.firstname)
   }
   handleLastName(e) {
@@ -246,17 +204,15 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
     })
     console.log('Email =', this.state.email)
   }
-  handleCustomerType(event){
-    this.setState({customer_type:event.target.value})
-    console.log("Customer Type ",event.target.value)
+  handleCustomerType(event) {
+    this.setState({customer_type: event.target.value})
+    console.log('Customer Type ', event.target.value)
   }
-  
 
   saveData = (e) => {
-    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
-
-  var id=userData._id;
- console.log("### id inside save method ##",id)
+    const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
+    var id = userData._id
+    console.log('### id inside save method ##', id)
     const data = {
       firstname: this.state.firstname,
       lastname: this.state.lastname,
@@ -270,49 +226,47 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
       usdot_no: this.state.usdot_no,
       mc_no: this.state.mc_no,
       mcInput: this.state.mcInput,
-      email:this.state.email,
-      customer_type:this.state.customer_type,
-      docket_number:this.state.docket_number
-      
+      email: this.state.email,
+      customer_type: this.state.customer_type,
+      docket_number: this.state.docket_number,
     }
     axios.put(`http://localhost:8080/api/update_new_customer/${id}`, data).then((res) => {
       console.log('RESPONSE = ', res)
       console.log(res.message)
       if (res.data.success) {
-          swal({
-            text: "Updated Sucessfully!",
-            icon: "success",
-            timer: 800,
-          
-          })
-          
-// console.log('data', res.data.message)
-        this.props.history.push({ 
+        swal({
+          text: 'Updated Sucessfully!',
+          icon: 'success',
+          timer: 800,
+        })
+
+        // console.log('data', res.data.message)
+        this.props.history.push({
           pathname: '/apps/customers/UpdateAccounting',
-          aboutProps:{userData}});
+          aboutProps: {userData},
+        })
       } else {
         swal({
-          text: "Error",
-          icon: "error",
-        });  
+          text: 'Error',
+          icon: 'error',
+        })
       }
     })
   }
-  
+
   render() {
     const {stateList} = this.state
     const userData =
-    this.props.location &&
-    this.props.location.aboutProps &&
-    this.props.location.aboutProps.userData;
-   
+      this.props.location &&
+      this.props.location.aboutProps &&
+      this.props.location.aboutProps.userData
 
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link active'>
-              <Link to= {{ pathname: '/apps/customers/UpdateCustomers', aboutProps: { userData}}}>
+              <Link to={{pathname: '/apps/customers/UpdateCustomers', aboutProps: {userData}}}>
                 {' '}
                 <h6 className='text-primary'> Customer Details</h6>
               </Link>
@@ -320,23 +274,29 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to= {{ pathname: '/apps/customers/UpdateAccounting',
-                            
-                            aboutProps: { userData}}}>
+              <Link
+                to={{
+                  pathname: '/apps/customers/UpdateAccounting',
+
+                  aboutProps: {userData},
+                }}
+              >
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to= {{ pathname:'/apps/customers/UpdateCustomerContact', aboutProps: { userData}}}>
+              <Link
+                to={{pathname: '/apps/customers/UpdateCustomerContact', aboutProps: {userData}}}
+              >
                 <h6 className='text-primary'> Contact Contact Details</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to= {{ pathname:'/apps/customers/UpdateCustomizeUnit', aboutProps: { userData}}}>
+              <Link to={{pathname: '/apps/customers/UpdateCustomizeUnit', aboutProps: {userData}}}>
                 {' '}
                 <h6 className='text-primary'> Customize Units</h6>
               </Link>
@@ -361,21 +321,21 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
 
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                       <label className='form-label text-dark fw-bolder required'>First Name</label>
-                      
+
                       <input
-                       type="text"
-                       name="firstname"
+                        type='text'
+                        name='firstname'
                         value={this.state.firstname}
                         onChange={this.handleFirstName}
                         className='form-control form-control-lg form-control-solid'
-                      
                       />
-                      
 
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='form-label form-label text-dark fw-bolder required'>Last Name</label>
+                      <label className='form-label form-label text-dark fw-bolder required'>
+                        Last Name
+                      </label>
 
                       <input
                         value={this.state.lastname}
@@ -383,56 +343,62 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         name='lastname'
                         className='form-control form-control-lg form-control-solid'
                       />
- <br/>
- <div className='col-md-12 fv-row'>
-                      <div className='row fv-row fv-plugins-icon-container'>
-                        <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>Email</label>
+                      <br />
+                      <div className='col-md-12 fv-row'>
+                        <div className='row fv-row fv-plugins-icon-container'>
+                          <div className='col-6'>
+                            <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>
+                              Email
+                            </label>
 
-                          <input
-                            value={this.state.email}
-                            onChange={this.handleEmail}
-                            type='email'
-                            className='form-control form-control-solid'
-                            name='email'
-                          />
-                          <div className='fv-plugins-message-container invalid-feedback'></div>
+                            <input
+                              value={this.state.email}
+                              onChange={this.handleEmail}
+                              type='email'
+                              className='form-control form-control-solid'
+                              name='email'
+                            />
+                            <div className='fv-plugins-message-container invalid-feedback'></div>
+                          </div>
+
+                          <div className='col-6'>
+                            <label className='fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>
+                              Customer Type
+                            </label>
+
+                            <div className='input-group-prepend'>
+                              <select
+                                onChange={this.handleCustomerType}
+                                value={this.state.customer_type}
+                                type='text'
+                                className='form-control form-control-solid'
+                                name='customer_type'
+                                className='form-select form-select-solid select2-hidden-accessible'
+                                data-control='select2'
+                                data-hide-search='true'
+                                data-select2-id='select2-data-13-fi4w'
+                                tabIndex={-1}
+                                aria-hidden='true'
+                              >
+                                <option>Select</option>
+                                <option value='DISTRIBUTORC'>DISTRIBUTOR</option>
+                                <option value='COMMERCE'>COMMERCE</option>
+                                <option value='FEDERAL GOVERNMENT'>FEDERAL GOVERNMENT</option>
+                                <option value='MANUFACTURER'>MANUFACTURER</option>
+                                <option value='MAILING COMPANY'>MAILING COMPANY</option>
+                                <option value='STATE GOVERNMENT'>STATE GOVERNMENT</option>
+                              </select>
+                            </div>
+                            <div className='fv-plugins-message-container invalid-feedback'></div>
+                          </div>
                         </div>
-
-                        <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required'>Customer Type</label>
-
-                          
-                          <div className='input-group-prepend'>
-                          <select
-                            onChange={this.handleCustomerType}
-                            value={this.state.customer_type}
-                            type='text'
-                            className='form-control form-control-solid'
-                            name='customer_type'
-                            data-control='select2'
-                            data-hide-search='true'
-                            data-select2-id='select2-data-13-fi4w'
-                            tabIndex={-1}
-                            aria-hidden='true'
-                          >
-                            <option value='DISTRIBUTORC'>DISTRIBUTOR</option>
-                            <option value='COMMERCE'>COMMERCE</option>
-                            <option value='FEDERAL GOVERNMENT'>FEDERAL GOVERNMENT</option>
-                            <option value='MANUFACTURER'>MANUFACTURER</option>
-                            <option value='MAILING COMPANY'>MAILING COMPANY</option>                          
-                            <option value='STATE GOVERNMENT'>STATE GOVERNMENT</option>                          
-
-                          </select>
-                        </div>
-                          <div className='fv-plugins-message-container invalid-feedback'></div>
-                        </div>
-                      </div>
                       </div>
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>Telephone</label>
+                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>
+                        Telephone
+                      </label>
                       <input
                         value={this.state.telephone}
                         onChange={this.handleTelephone}
@@ -444,7 +410,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>Country</label>
+                      <label className='fs-6 fw-bold form-label form-label text-dark fw-bolder required'>
+                        Country
+                      </label>
                       {/* <input
                         value={this.state.country}
                         onChange={this.handleCountry}
@@ -711,7 +679,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       <div className='col-md-8 fv-row'>
                         <div className='row fv-row fv-plugins-icon-container'>
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Postal Code</label>
+                            <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>
+                              Postal Code
+                            </label>
 
                             <input
                               value={this.state.postal_code}
@@ -724,7 +694,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                           </div>
 
                           <div className='col-6'>
-                            <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required '>City</label>
+                            <label className=' fs-6 fw-bold form-label mb-2 form-label text-dark fw-bolder required '>
+                              City
+                            </label>
 
                             <select
                               type='text'
@@ -748,7 +720,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                       </div>
 
                       <div className='col-4'>
-                        <label className=' fs-6 fw-bold form-label form-label text-dark fw-bolder required mb-2'>State</label>
+                        <label className=' fs-6 fw-bold form-label form-label text-dark fw-bolder required mb-2'>
+                          State
+                        </label>
 
                         <select
                           type='text'
@@ -773,7 +747,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                     <div className='col-md-12 fv-row'>
                       <div className='row fv-row fv-plugins-icon-container'>
                         <div className='col-6'>
-                          <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Street 1</label>
+                          <label className=' fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>
+                            Street 1
+                          </label>
 
                           <input
                             value={this.state.street_1}
@@ -786,7 +762,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         </div>
 
                         <div className='col-6'>
-                          <label className='fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>Street 2</label>
+                          <label className='fs-6 fw-bold form-label required form-label text-dark fw-bolder mb-2'>
+                            Street 2
+                          </label>
 
                           <input
                             value={this.state.street_2}
@@ -813,7 +791,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                 <div className='col-md-12 fv-row'>
                   <div className='row fv-row fv-plugins-icon-container'>
                     <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>MC/FF/MX Number</label>
+                      <label className=' fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>
+                        MC/FF/MX Number
+                      </label>
 
                       <div className='input-group mb-3'>
                         {/* <div className='input-group-prepend'>
@@ -845,7 +825,9 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                     </div>
 
                     <div className='col-6'>
-                      <label className='fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>USDOT Number</label>
+                      <label className='fs-6 fw-bold form-label mb-2 required form-label text-dark fw-bolder'>
+                        USDOT Number
+                      </label>
 
                       <input
                         value={this.state.usdot_no}
@@ -945,8 +927,7 @@ axios.get(`http://localhost:8080/api/get_customer_contacts/${userData._id}`).the
                         </svg>
                       </span>
                     </button>
-                            <ToastContainer />
-
+                    <ToastContainer />
                   </div>
                 </div>
                 <div></div>
