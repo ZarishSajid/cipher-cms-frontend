@@ -36,6 +36,8 @@ class UsersList extends React.Component {
       City: [],
       fireRedirect: false,
       redirectRoute: '',
+      post_title:"test",
+      post_comment:"zarish"
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -60,6 +62,25 @@ class UsersList extends React.Component {
     const formData = new FormData()
     formData.append('img', files[0])
     console.log('Imagee', files)
+
+    const data = {
+    post_title:this.state.post_title,
+    post_comment:this.state.post_comment
+    }
+    console.log('dataa', data)
+    axios
+      .post(`http://localhost:8000/post`, data,files)
+
+      .then((res) => {
+        console.log('RESPONSE = ', res.data.data)
+        // console.log('City Name = ', res.data.data)
+        // console.log('State Name = ', res.data.state_name)
+        // this.setState({isLoading: false, stateList: res.data.data})
+        // console.log('view state list', this.state.stateList)
+
+        
+      })
+
   }
   handleMcNumber(event) {
     this.setState({mc_no: event.target.value})
@@ -96,19 +117,30 @@ class UsersList extends React.Component {
   }
 
   handleEmail(e) {
-    // var email = e.target.value
+    this.setState(
+      {
+        email:e.target.value
+      },
+      () => {
+        
+        const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (this.state.email.match(regexEmail)) {
+          // return true; 
+          console.log("success")
+        } else {
+          // return false; 
+          console.log("not valid")
+        }
+          })
+      
+        }
+        
 
-    // if (validator.isEmail(email)) {
-    //   this.setState({emailError:"Valid Email :)"})
-    // } else {
-    //   this.setState({emailError:"Invalid Email :)"})
-    // }
-    this.setState({
-      email: e.target.value.toUpperCase(),
-    })
-    console.log('Email =', this.state.email)
-  }
 
+
+
+
+  
   handleStreet1(e) {
     this.setState({
       street_1: e.target.value.toUpperCase(),
@@ -123,10 +155,21 @@ class UsersList extends React.Component {
     console.log('Street 2 =', this.state.street_2)
   }
   handleUsDot(e) {
-    this.setState({
-      usdot_no: e.target.value,
-    })
-    console.log('USDOT Number =', this.state.usdot_no)
+    this.setState(
+      {
+        usdot_no:e.target.value
+      },
+      () => {
+        console.log("before if in usdot",this.state.usdot_no)
+        if((this.state.usdot_no).length == 7){
+        
+          console.log("success")
+         }
+         else{
+           console.log("usdot number must be 7 digit")
+         }
+          })
+    // console.log('USDOT Number =', this.state.usdot_no)
   }
 
   handlePostalCode(event) {
@@ -177,9 +220,22 @@ class UsersList extends React.Component {
     console.log('State Name =', event.target.value)
   }
   handleTelephone(e) {
-    this.setState({
-      telephone: e.target.value,
-    })
+      this.setState(
+        {
+          telephone:e.target.value
+        },
+        () => {
+          
+          const regexphone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+          if (this.state.telephone.match(regexphone)) {
+            // return true; 
+            console.log("success")
+          } else {
+            // return false; 
+            console.log("not valid")
+          }
+            })
+      
     console.log('Phone =', this.state.telephone)
   }
 
@@ -305,7 +361,7 @@ class UsersList extends React.Component {
           <div className=' card '>
             <div className='w-100'>
               <form
-              onSubmit={this.saveData()}
+              // onSubmit={this.saveData()}
                 className='mx-auto mw-600px w-100 pt-15 pb-10 fv-plugins-bootstrap5 fv-plugins-framework'
                 noValidate={true}
               >
@@ -324,6 +380,7 @@ class UsersList extends React.Component {
                         value={this.state.firstname}
                         onChange={this.handleFirstName}
                         name='firstname'
+                        type="text"
                         className='form-control form-control-lg form-control-solid'
                       />
 
@@ -1503,6 +1560,7 @@ class UsersList extends React.Component {
                         onChange={this.handleUsDot}
                         type='number'
                         maxlength='7'
+                        minlength='7'
                         className='form-control form-control-lg form-control-solid'
                         name='usdot'
                       />
@@ -1521,7 +1579,7 @@ class UsersList extends React.Component {
         onchange={this.fileValidation} /> */}
                     </div>
 
-                    <div className='col-12'>
+                    {/* <div className='col-12'>
                       <input
                         type='file'
                         id='profile_pic'
@@ -1530,14 +1588,69 @@ class UsersList extends React.Component {
                         className='form-control form-control-lg form-control-solid'
                         onChange={this.handleChange}
                       />
+                    </div> */}
+
+
+
+<br/>
+                    <div className='col-6'>
+                      <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
+                        Choose File
+                      </label>
+
+                      <div className='input-group mb-3'>
+                        <div className='input-group-prepend'>
+                        <input
+                        type='file'
+                        id='profile_pic'
+                        name='profile_pic'
+                        accept='.pdf, .jpeg, .png,.docx'
+                        className='form-control form-control-lg form-control-solid'
+                        onChange={this.handleChange}
+                      />
+                        </div>
+
+                      </div>
+                      <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
+
+                    <div className='col-6'>
+                      <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
+                        File Type
+                      </label>
+
+                      <select
+                                onChange={this.handleCustomerType}
+                                value={this.state.customer_type}
+                                type='text'
+                                className='form-control form-control-solid'
+                                className='form-select form-select-solid select2-hidden-accessible'
+                                data-control='select2'
+                                data-hide-search='true'
+                                data-select2-id='select2-data-13-fi4w'
+                                tabIndex={-1}
+                                aria-hidden='true'
+                              >
+                                {' '}
+                                <option value=''>Select</option>
+                                <option value='Business License'>Business License</option>
+                                <option value='COMMERCE'>Insurance</option>
+                                <option value='FEDERAL GOVERNMENT'>FEDERAL GOVERNMENT</option>
+                                <option value='MANUFACTURER'>MANUFACTURER</option>
+                                <option value='MAILING COMPANY'>MAILING COMPANY</option>
+                                <option value='STATE GOVERNMENT'>STATE GOVERNMENT</option>
+                              </select>
+                   
+                      <div className='fv-plugins-message-container invalid-feedback'></div>
+                    </div>
+                    
                   </div>
                 </div>
 
                 <div className='d-flex flex-stack pt-15'>
                   <div>
                     <button
-                      // onClick={() => this.saveData()}
+                      onClick={() => this.saveData()}
                       type='button'
                       className='btn btn-lg btn-primary me-3 d-inline-block'
                       data-kt-stepper-action='submit'
