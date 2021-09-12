@@ -895,13 +895,13 @@ class UsersList extends React.Component {
                               <div className='d-flex fv-row'>
                                 <div className='radio'>
                                   <input
-                                    className='form-check-input me-4'
+                                    className='form-check-input me-3'
                                     type='radio'
                                     value='Administrator'
                                     checked={this.state.role === 'Administrator'}
                                     onChange={this.onValueChange}
                                   />
-                                  <label className='margin-left'>  Administrator</label>
+                                  <label className='fw-bolder text-gray-800'>  Administrator</label>
                                 </div>
                               </div>
                               <div className='separator separator-dashed my-5'></div>

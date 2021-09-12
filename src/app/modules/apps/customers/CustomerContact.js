@@ -30,37 +30,52 @@ class CustomerContact extends React.Component {
     this.handleFax = this.handleFax.bind(this)
     this.handleContactName = this.handleContactName.bind(this)
   }
-
-  handleContactExtension(e) {
-    this.setState({
-      contact_extension: e.target.value,
+componentDidMount(){
+  this.setState({
+    contact_name:sessionStorage.getItem('contact_name'),
+    contact_email:sessionStorage.getItem('contact_email'),
+    contact_telephone:sessionStorage.getItem('contact_telephone'),
+    contact_extension:sessionStorage.getItem('contact_extension'),
+    contact_fax:sessionStorage.getItem('contact_fax')
     })
-    console.log('Contact Extension =', this.state.contact_extension)
-  }
-  handleContactTelephone(e) {
-    this.setState({
-      contact_telephone: e.target.value,
-    })
-    console.log('Contact Telephone =', this.state.contact_telephone)
-  }
-  handleEmail(e) {
-    this.setState({
-      contact_email: e.target.value.toUpperCase(),
-    })
-    console.log('Contact Email=', this.state.contact_email)
-  }
-  handleContactName(e) {
-    this.setState({
-      contact_name: e.target.value.toUpperCase(),
-    })
-    console.log('Contact Name=', this.state.contact_name)
-  }
-  handleFax(e) {
-    this.setState({
-      contact_fax: e.target.value.toUpperCase(),
-    })
-    console.log('Contact Fax=', this.state.contact_fax)
-  }
+  
+}
+  handleContactExtension(event) {
+    this.setState(
+      {
+        contact_extension:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_extension' , event.target.value)
+        window.sessionStorage.setItem('contact_extension',this.state.contact_extension);})}
+  handleContactTelephone(event) {
+    this.setState(
+      {
+        contact_telephone:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_telephone' , event.target.value)
+        window.sessionStorage.setItem('contact_telephone',this.state.contact_telephone);})}
+  handleEmail(event) {
+    this.setState(
+      {
+        contact_email:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_email' , event.target.value)
+        window.sessionStorage.setItem('contact_email',this.state.contact_email);})}
+  
+  handleContactName(event) {
+    this.setState(
+      {
+        contact_name:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_name' , event.target.value)
+        window.sessionStorage.setItem('contact_name',this.state.contact_name);})}
+  handleFax(event) {
+    this.setState(
+      {
+        contact_fax:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_fax' , event.target.value)
+        window.sessionStorage.setItem('contact_fax',this.state.contact_fax);})}
 
   addContact(e) {
     this.setState({
@@ -216,7 +231,7 @@ class CustomerContact extends React.Component {
                         value={this.state.contact_telephone}
                         onChange={this.handleContactTelephone}
                         type='number'
-                        className='form-control form-control-solid'
+                        className='form-control form-control-lg form-control-solid'
                         name='contact_telephone'
                       />
                       <div className='fv-plugins-message-container invalid-feedback'></div>
@@ -228,8 +243,8 @@ class CustomerContact extends React.Component {
                       <input
                         value={this.state.contact_extension}
                         onChange={this.handleContactExtension}
-                        type='number'
-                        className='form-control form-control-solid'
+                        type='text'
+                        className='form-control form-control-lg form-control-solid'
                         name='contact_extension'
                       />
                       <span

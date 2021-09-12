@@ -148,7 +148,7 @@ export function AsideMenuMain() {
     <AsideMenuItem
              icon='/media/icons/duotone/Communication/Group-chat.svg'
         to='/apps/customers/ViewCustomers'
-        title='View Customers'
+        title='Customers'
       />
     
       <AsideMenuItem

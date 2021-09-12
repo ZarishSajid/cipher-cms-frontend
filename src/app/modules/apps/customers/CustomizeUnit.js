@@ -27,31 +27,69 @@ class UsersList extends React.Component {
     this.handlePublicNotes = this.handlePublicNotes.bind(this)
     this.handlePrivateNotes = this.handlePrivateNotes.bind(this)
   }
-
-  handlePublicNotes(e) {
+  
+  componentDidMount(){
     this.setState({
-      public_notes: e.target.value.toUpperCase(),
+      temperature_unit:sessionStorage.getItem('temperature_unit'),
+      weight_unit:sessionStorage.getItem('weight_unit'),
+      distance_unit:sessionStorage.getItem('distance_unit'),
+      private_notes:sessionStorage.getItem('private_notes'),
+      public_notes:sessionStorage.getItem('public_notes')
     })
-    console.log('Public Notes =', this.state.public_notes)
   }
+  handlePublicNotes(event) {
+    this.setState(
+      {
+        public_notes:event.target.value.toUpperCase()
+      },() => {
+        window.sessionStorage.setItem("public_notes",this.state.public_notes)})
+      
+        console.log('Public Notes =', this.state.public_notes)
 
-  handlePrivateNotes(e) {
-    this.setState({
-      private_notes: e.target.value.toUpperCase(),
-    })
-    console.log('Private Notes =', this.state.private_notes)
-  }
+      }
+  
+
+  handlePrivateNotes(event) {
+    this.setState(
+      {
+        private_notes:event.target.value.toUpperCase()
+      },() => {
+        window.sessionStorage.setItem("private_notes",this.state.private_notes)})}
+  
   handleTemperatureUnit(event) {
-    this.setState({temperature_unit: event.target.value})
-    console.log('Temperature Unit =', event.target.value)
+    this.setState(
+      {
+      temperature_unit:event.target.value
+      },
+      () => {
+        console.log('temperature_unit =', event.target.value)
+
+      window.sessionStorage.setItem('temperature_unit',this.state.temperature_unit);
+      })
   }
+  
   handleWeightUnit(event) {
-    this.setState({weight_unit: event.target.value})
-    console.log('Weight Unit =', event.target.value)
+    this.setState(
+      {
+      weight_unit:event.target.value
+      },
+      () => {
+        console.log('weight_unit =',event.target.value)
+
+      window.sessionStorage.setItem('weight_unit',this.state.weight_unit);
+      })
+  
   }
   handleDistanceUnit(event) {
-    this.setState({distance_unit: event.target.value})
-    console.log('Distance Unit =', event.target.value)
+    this.setState(
+      {
+      distance_unit:event.target.value
+      },
+      () => {
+        console.log('distance_unit =', event.target.value)
+
+      window.sessionStorage.setItem('distance_unit',this.state.distance_unit);
+      })
   }
 
  
@@ -158,6 +196,7 @@ const {stateList}=this.state
                         tabIndex={-1}
                         aria-hidden='true'
                       >
+                         <option value="">Select</option>
                         <option value='Pounds'>Pounds</option>
                         <option value='Kilogram'>Kilogram</option>
                         <option value='Use my company default setting'>
@@ -183,6 +222,7 @@ const {stateList}=this.state
                         tabIndex={-1}
                         aria-hidden='true'
                       >
+                         <option value="">Select</option>
                         <option value='Use my company default setting'>
                           Use my company's default setting
                         </option>
@@ -207,7 +247,7 @@ const {stateList}=this.state
                         data-select2-id='select2-data-13-fi4w'
                         tabIndex={-1}
                         aria-hidden='true'
-                      >
+                      > <option value="">Select</option>
                         <option value='Farheneit'>Farhreneit</option>
                         <option value='Celsius'>Celsius</option>
                         <option value='Use my company default setting'>

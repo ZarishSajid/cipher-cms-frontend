@@ -8,6 +8,7 @@ import '../index.css'
 import {Link} from 'react-router-dom'
 import swal from 'sweetalert'
 import validator from 'validator';
+import session from 'redux-persist/lib/storage/session'
 
 class UsersList extends React.Component {
   constructor(props) {
@@ -25,6 +26,7 @@ class UsersList extends React.Component {
       city: '',
       state: '',
       telephone: '',
+      telephone_extension:'',
       value: 'mc',
       email: '',
       mcInput: '',
@@ -32,12 +34,11 @@ class UsersList extends React.Component {
       place_name: '',
       customer_type: '',
       stateList: [],
-      emailError:{},
+      error:{},
       City: [],
       fireRedirect: false,
       redirectRoute: '',
-      post_title:"test",
-      post_comment:"zarish"
+      image:null
     }
     this.saveData = this.saveData.bind(this)
     this.handleFirstName = this.handleFirstName.bind(this)
@@ -55,66 +56,104 @@ class UsersList extends React.Component {
     this.handleEmail = this.handleEmail.bind(this)
     this.handleCustomerType = this.handleCustomerType.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    this.handleTelephoneExtension=this.handleTelephoneExtension.bind(this)
   }
+ componentDidMount(){
+   this.setState({
+     email:sessionStorage.getItem('customer_email'),
+     street_2:sessionStorage.getItem('customer_street2'),
+     street_1:sessionStorage.getItem('customer_street1'),
+     country:sessionStorage.getItem('customer_country'),
+     customer_type:sessionStorage.getItem('customer_type'),
+    firstname:sessionStorage.getItem('customer_firstname'),
+    lastname:sessionStorage.getItem('customer_lastname'),
+    telephone_extension:sessionStorage.getItem('customer_telephone_extension'),
+    telephone:sessionStorage.getItem('customer_telephone_number'),
+    postal_code:sessionStorage.getItem('customer_postal_code'),
+    usdot_no:sessionStorage.getItem('customer_usdot_no'),
+    city:sessionStorage.getItem('customer_city'),
+    mcInput:sessionStorage.getItem('customer_mcInput'),
+    mc_no:sessionStorage.getItem('customer_mc_no')
 
+   })
+ }
   handleChange(event) {
-    const files = event.target.files
-    const formData = new FormData()
-    formData.append('img', files[0])
-    console.log('Imagee', files)
+    this.setState({
+      files: URL.createObjectURL(event.target.files[0]),
+    })
+    console.log('filee ************', event.target.value)
 
-    const data = {
-    post_title:this.state.post_title,
-    post_comment:this.state.post_comment
-    }
-    console.log('dataa', data)
-    axios
-      .post(`http://localhost:8000/post`, data,files)
+    
+    // console.log('dataa', data)
+    // axios
+    //   .post(`http://localhost:8000/post`, data)
 
-      .then((res) => {
-        console.log('RESPONSE = ', res.data.data)
-        // console.log('City Name = ', res.data.data)
-        // console.log('State Name = ', res.data.state_name)
-        // this.setState({isLoading: false, stateList: res.data.data})
-        // console.log('view state list', this.state.stateList)
+    //   .then((res) => {
+    //     console.log('RESPONSE = ', res.data.data)
+    //     // console.log('City Name = ', res.data.data)
+    //     // console.log('State Name = ', res.data.state_name)
+    //     // this.setState({isLoading: false, stateList: res.data.data})
+    //     // console.log('view state list', this.state.stateList)
 
         
-      })
+    //   })
 
   }
   handleMcNumber(event) {
-    this.setState({mc_no: event.target.value})
-    console.log('MCNumber Number =', event.target.value)
-  }
+    this.setState(
+      {
+        mc_no:event.target.value
+      },
+      () => {
+      window.sessionStorage.setItem("customer_mc_no",this.state.mc_no);
+      console.log('MC Number =', event.target.value)
+
+      })
+    }  
 
   handleMcInput(event) {
-    this.setState({mcInput: event.target.value.toUpperCase()})
-    console.log('MC Input =', this.state.mcInput)
-  }
+    this.setState(
+      {
+        mcInput:event.target.value.toUpperCase()
+      },
+      () => {
+        console.log('MC input =', this.state.mcInput)
 
+      window.sessionStorage.setItem("customer_mcInput",this.state.mcInput);
+      })
+  }
+  
   handleCustomerType(event) {
-    this.setState({customer_type: event.target.value})
-    console.log('Customer Type ', event.target.value)
-  }
+    this.setState(
+      {
+        customer_type:event.target.value
+      },() => {
+        window.sessionStorage.setItem("customer_type",this.state.customer_type);})}
 
-  handleFirstName(e) {
-    this.setState({
-      firstname: e.target.value.toUpperCase(),
-    })
-    console.log('First Name =', this.state.firstname)
-  }
-  handleLastName(e) {
-    this.setState({
-      lastname: e.target.value.toUpperCase(),
-    })
-    console.log('Last Name =', this.state.lastname)
-  }
+  handleFirstName(event) {
+    this.setState(
+      {
+        firstname:event.target.value.toUpperCase()
+      },() => {
+        console.log('firstname =', event.target.value)
+        window.sessionStorage.setItem("customer_firstname",this.state.firstname);})}
+  handleLastName(event) {
+    this.setState(
+      {
+        lastname:event.target.value.toUpperCase()
+      },() => {
+        console.log('lastname=', event.target.value)
+        window.sessionStorage.setItem("customer_lastname",this.state.lastname);})}
   handleCountry(e) {
-    this.setState({
-      country: e.target.value,
-    })
-    console.log('Country =', e.target.value)
-  }
+  this.setState(
+    {
+      country:e.target.value
+    },
+    () => {
+      console.log('country =', e.target.value)
+      window.sessionStorage.setItem("customer_country",this.state.country);
+        })
+}
 
   handleEmail(e) {
     this.setState(
@@ -122,37 +161,41 @@ class UsersList extends React.Component {
         email:e.target.value
       },
       () => {
-        
-        const regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-        if (this.state.email.match(regexEmail)) {
+        window.sessionStorage.setItem('customer_email',this.state.email);
+
+        const regexemail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        if (this.state.email.match(regexemail)) {
           // return true; 
           console.log("success")
         } else {
           // return false; 
           console.log("not valid")
+
         }
           })
-      
-        }
-        
-
-
-
-
-
-  
+    
+  console.log('customer email =', this.state.email)
+}
   handleStreet1(e) {
-    this.setState({
-      street_1: e.target.value.toUpperCase(),
-    })
-    console.log('Street 1 =', this.state.street_1)
+    this.setState(
+      {
+        street_1:e.target.value
+      },
+      () => {
+      window.sessionStorage.setItem("customer_street1",this.state.street_1);
+      })
   }
 
   handleStreet2(e) {
-    this.setState({
-      street_2: e.target.value.toUpperCase(),
-    })
-    console.log('Street 2 =', this.state.street_2)
+    
+    this.setState(
+      {
+        street_2:e.target.value
+      },
+      () => {
+    
+        window.sessionStorage.setItem("customer_street2",this.state.street_2);
+          })
   }
   handleUsDot(e) {
     this.setState(
@@ -160,9 +203,10 @@ class UsersList extends React.Component {
         usdot_no:e.target.value
       },
       () => {
+        window.sessionStorage.setItem("customer_usdot_no",this.state.usdot_no);
+
         console.log("before if in usdot",this.state.usdot_no)
         if((this.state.usdot_no).length == 7){
-        
           console.log("success")
          }
          else{
@@ -180,10 +224,11 @@ class UsersList extends React.Component {
         postal_code: event.target.value,
       },
       () => {
+
         console.log('Complete value', this.state.postal_code)
+        window.sessionStorage.setItem("customer_postal_code",this.state.postal_code);
 
         // geoname api start
-
         const data = {
           postal_code: this.state.postal_code,
           country_code: this.state.country,
@@ -209,23 +254,51 @@ class UsersList extends React.Component {
 
     // geonames api calling
   }
-  handleCity(e) {
-    this.setState({
-      city: e.target.value,
-    })
-    console.log('City =', e.target.value)
+  handleCity(event) {
+    this.setState(
+      {
+        city:event.target.value
+      },
+      () => {
+        console.log('city =', this.state.city)
+      window.sessionStorage.setItem("customer_city",this.state.city);
+      })
   }
+  
   handleState(event) {
-    this.setState({state: event.target.value})
-    console.log('State Name =', event.target.value)
+    this.setState(
+      {
+        state:event.target.value
+      },
+      () => {
+      window.sessionStorage.setItem("customer_state",this.state.state);
+      console.log('State Name =', event.target.value)
+
+      })
   }
+  
+
+  
+handleTelephoneExtension(event){
+  this.setState(
+    {
+      telephone_extension:event.target.value
+    },() => {
+
+      console.log("Telephone extension",this.state.telephone_extension)
+      window.sessionStorage.setItem("customer_telephone_extension",this.state.telephone_extension);})}
+
+
+
+
   handleTelephone(e) {
       this.setState(
         {
           telephone:e.target.value
         },
         () => {
-          
+          window.sessionStorage.setItem("customer_telephone_number",this.state.telephone);
+
           const regexphone = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
           if (this.state.telephone.match(regexphone)) {
             // return true; 
@@ -233,6 +306,7 @@ class UsersList extends React.Component {
           } else {
             // return false; 
             console.log("not valid")
+
           }
             })
       
@@ -249,10 +323,7 @@ class UsersList extends React.Component {
       alert("Success")
     }
 
-    const userData =
-      this.props.location &&
-      this.props.location.aboutProps &&
-      this.props.location.aboutProps.userData
+    
 
     const data = {
       firstname: this.state.firstname,
@@ -264,6 +335,7 @@ class UsersList extends React.Component {
       state: this.state.state,
       country: this.state.country,
       telephone: this.state.telephone,
+      telephone_extension:this.state.telephone_extension,
       usdot_no: this.state.usdot_no,
       mc_no: this.state.mc_no,
       mcInput: this.state.mcInput,
@@ -276,7 +348,7 @@ class UsersList extends React.Component {
       console.log(res.message)
       if (res.data.success) {
         console.log('data', res.data.message)
-        localStorage.setItem('id', res.data.data._id)
+        sessionStorage.setItem('customer_id', res.data.data._id)
 
         swal({
           text: 'Saved Sucessfully!',
@@ -286,7 +358,6 @@ class UsersList extends React.Component {
         this.props.history.push({
           pathname: '/apps/customers/Accounting',
         })
-        console.log(' userdata in if condition', userData)
       } else {
         console.log('else response', res)
         swal({
@@ -322,6 +393,7 @@ class UsersList extends React.Component {
   }
   render() {
     const {stateList} = this.state
+   
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
@@ -335,7 +407,7 @@ class UsersList extends React.Component {
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/Accounting'>
+              <Link to={{pathname: '/apps/customers/Accounting'}}>
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
@@ -457,21 +529,24 @@ class UsersList extends React.Component {
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
                     <div className='fv-row mb-0 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
-                      <label className='fs-6 fw-bold form-label required text-dark fw-bolder'>
-                        Telephone
-                      </label>
-                      <div className='input-group mb-3'>
-                        <div className='input-group-prepend'>
-                          <select
-                            name='mc_no'
-                            name='countryCode'
-                            id=''
-                            className='form-select form-select-solid select2-hidden-accessible'
-                            data-control='select2'
-                            data-hide-search='true'
-                            data-select2-id='select2-data-13-fi4w'
-                            tabIndex={-1}
-                            aria-hidden='true'
+                      <div className='col-md-12 fv-row'>
+                        <div className='row fv-row fv-plugins-icon-container'>
+                          <div className='col-6'>
+                            <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
+                              EXT
+                            </label>
+
+                            <select
+                           onChange={this.handleTelephoneExtension}
+                           value={this.state.telephone_extension}
+                           type='text'
+                                className='form-control form-control-solid'
+                                className='form-select form-select-solid select2-hidden-accessible'
+                                data-control='select2'
+                                data-hide-search='true'
+                                data-select2-id='select2-data-13-fi4w'
+                                tabIndex={-1}
+                                aria-hidden='true'
                           >
                             <option data-countryCode='GB' value='44' Selected>
                               UK (+44)
@@ -480,7 +555,7 @@ class UsersList extends React.Component {
                               USA (+1)
                             </option>
                             <option data-countryCode='DZ' value='213'>
-                              Algeria +213)
+                              Algeria (+213)
                             </option>
                             <option data-countryCode='AD' value='376'>
                               Andorra (+376)
@@ -1125,21 +1200,29 @@ class UsersList extends React.Component {
                               Zimbabwe (+263)
                             </option>
                           </select>{' '}
-                        </div>
-                        <input
-                          value={this.state.telephone}
-                          onChange={this.handleTelephone}
-                          type='phone'
-                          pattern='^\d{4}-\d{3}-\d{4}$'
-                          required
-                          name='telephone'
-                          className='form-control form-control-lg form-control-solid'
-                        />
-                      </div>
+                            <div className='fv-plugins-message-container invalid-feedback'>
+                              
+                            </div>
+                          </div>
 
-                      <div className='col-12'>
-                        <div className='fv-plugins-message-container invalid-feedback'></div>
-                      </div>
+                          <div className='col-6'>
+                            <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
+                             Telephone
+                            </label>
+
+                            <div className='input-group-prepend'>
+                             <input
+                        value={this.state.country}
+                        onChange={this.handleCountry}
+                        type='text'
+                        name='country'
+                        className='form-control form-control-lg form-control-solid'
+                      />
+                            </div>
+                            <div className='fv-plugins-message-container invalid-feedback'></div>
+                          </div>
+                        </div>
+                      </div>                    
 
                       <br />
                       <div className='fv-plugins-message-container invalid-feedback'></div>
@@ -1148,13 +1231,7 @@ class UsersList extends React.Component {
                       <label className='fs-6 fw-bold form-label required text-dark fw-bolder'>
                         Country
                       </label>
-                      {/* <input
-                        value={this.state.country}
-                        onChange={this.handleCountry}
-                        type='text'
-                        name='country'
-                        className='form-control form-control-lg form-control-solid'
-                      /> */}
+                      
                       <select
                         onChange={this.handleCountry}
                         value={this.state.country}
@@ -1559,8 +1636,6 @@ class UsersList extends React.Component {
                         value={this.state.usdot_no}
                         onChange={this.handleUsDot}
                         type='number'
-                        maxlength='7'
-                        minlength='7'
                         className='form-control form-control-lg form-control-solid'
                         name='usdot'
                       />
@@ -1574,47 +1649,34 @@ class UsersList extends React.Component {
                       </span>
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
-                    <div>
-                      {/* <input type="file" id="file"
-        onchange={this.fileValidation} /> */}
-                    </div>
-
-                    {/* <div className='col-12'>
-                      <input
-                        type='file'
-                        id='profile_pic'
-                        name='profile_pic'
-                        accept='.pdf, .jpeg, .png,.docx'
-                        className='form-control form-control-lg form-control-solid'
-                        onChange={this.handleChange}
-                      />
-                    </div> */}
+                   
 
 
+                   
 
 <br/>
-                    <div className='col-6'>
-                      <label className=' fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
-                        Choose File
-                      </label>
-
-                      <div className='input-group mb-3'>
+<div className='col-12'>
+                           <br/>
                         <div className='input-group-prepend'>
                         <input
-                        type='file'
-                        id='profile_pic'
-                        name='profile_pic'
-                        accept='.pdf, .jpeg, .png,.docx'
-                        className='form-control form-control-lg form-control-solid'
-                        onChange={this.handleChange}
-                      />
-                        </div>
-
-                      </div>
-                      <div className='fv-plugins-message-container invalid-feedback'></div>
-                    </div>
-
-                    <div className='col-6'>
+                              type='file'
+                              id='profile_pic'
+                              name='profile_pic'
+                              accept='.pdf, .jpeg, .png,.docx'
+                              className='form-control form-control-lg form-control-solid'
+                              onChange={this.handleChange}
+                            />
+                            <img  style={{ width:"50px",height:"44px",
+                        // backgroundImage: `url("https://www.nicesnippets.com/image/imgpsh_fullsize.png")`
+                    }} src={this.state.files} /> 
+                        </div>   
+                            
+                           
+                            <div className='fv-plugins-message-container invalid-feedback'></div>
+                          </div>
+                         
+                    <div className='col-12'>
+                          <br/>
                       <label className='fs-6 fw-bold form-label mb-2 text-dark fw-bolder'>
                         File Type
                       </label>
@@ -1643,7 +1705,7 @@ class UsersList extends React.Component {
                    
                       <div className='fv-plugins-message-container invalid-feedback'></div>
                     </div>
-                    
+                   
                   </div>
                 </div>
 

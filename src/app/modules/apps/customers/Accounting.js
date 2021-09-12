@@ -25,35 +25,62 @@ class UsersList extends React.Component {
     this.handleAvailableCredit = this.handleAvailableCredit.bind(this)
     this.handlePaymentTerms = this.handlePaymentTerms.bind(this)
   }
-
+componentDidMount(){
+  this.setState({
+credit_hold:sessionStorage.getItem('customer_credit_hold'),
+credit_limit:sessionStorage.getItem('customer_credit_limit'),
+available_credit:sessionStorage.getItem('customer_available_credit'),
+payment_terms:sessionStorage.getItem('customer_payment_terms')
+  })
+}
   onValueChange(e) {
-    this.setState({
-      credit_hold: e.target.value,
-    })
-    console.log('credit_hold=', e.target.value)
-  }
+      this.setState(
+      {
+        credit_hold:e.target.value.toUpperCase()
+      },
+      () => {
+      window.sessionStorage.setItem("customer_credit_hold",this.state.credit_hold);
+      console.log('Credit hold =', e.target.value)
 
-  handleCreditLimit(event) {
-    this.setState({credit_limit: event.target.value.toUpperCase()})
-    console.log('Credit Limit =', this.state.credit_limit)
-  }
+      })
+    }  
 
+  handleCreditLimit(e) {
+    this.setState(
+      {
+        credit_limit:e.target.value.toUpperCase()
+      },
+      () => {
+      window.sessionStorage.setItem("customer_credit_limit",this.state.credit_limit);
+      console.log('Credit limit =', e.target.value)
+
+      })
+    }  
   handleAvailableCredit(e) {
-    this.setState({
-      available_credit: e.target.value.toUpperCase(),
-    })
-    console.log('Available Credit =', this.state.available_credit)
-  }
+    this.setState(
+      {
+        available_credit:e.target.value.toUpperCase()
+      },
+      () => {
+      window.sessionStorage.setItem("customer_available_credit",this.state.available_credit);
+      console.log(' Available Credit =', e.target.value)
+
+      })
+    }  
 
   handlePaymentTerms(e) {
-    this.setState({
-      payment_terms: e.target.value.toUpperCase(),
-    })
-    console.log('Payment Terms =', this.state.payment_terms)
-  }
+    this.setState(
+      {
+      payment_terms:e.target.value.toUpperCase()
+      },
+      () => {
+      window.sessionStorage.setItem("customer_payment_terms",this.state.payment_terms);
+      console.log('payment terms =', e.target.value)
+      })
+    }  
 
   saveAccountingDetail = (e) => {
-    var id = localStorage.getItem('id')
+    var id = sessionStorage.getItem('customer_id')
      console.log(id, 'id inside save accounting details')
     const data = {
       available_credit: this.state.available_credit,
@@ -81,16 +108,22 @@ class UsersList extends React.Component {
         });      }
     })
   }
+
+
   render() {
+    const userData =
+    this.props.location &&
+    this.props.location.aboutProps &&
+    this.props.location.aboutProps.userData
     const {stateList} = this.state
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to='/apps/customers/AddCustomers'>
+              <Link to={{pathname: '/apps/customers/AddCustomers', }}>
                 {' '}
-                <h6 className='text-primary'> Customer Details</h6>
+                <h6  className='text-primary'> Customer Details</h6>
               </Link>
             </a>
           </li>

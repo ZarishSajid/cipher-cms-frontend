@@ -33,29 +33,34 @@ class AddCustomerContact extends React.Component {
 
 
   componentDidMount() {
-    const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
-  console.log("data in Add customer contact",userData)
-  this.setState({
-      
-    contact_name: userData && userData._id
-    ? userData.contact_name
-    : this.state.contact_name,
-    contact_telephone: userData && userData._id
-    ? userData.contact_telephone
-    : this.state.contact_telephone,
-    contact_email: userData && userData._id
-    ? userData.contact_email
-    : this.state.contact_email,
-    contact_fax: userData && userData._id
-    ? userData.contact_fax
-    : this.state.contact_fax,
-    contact_extension: userData && userData._id
-    ? userData.contact_extension
-    : this.state.contact_extension,
+  //   const userData =this.props.location.aboutProps && this.props.location.aboutProps.userData;
+  // console.log("data in Add customer contact",userData)
+  // this.setState({
+
+  //   contact_name: userData && userData._id
+  //   ? userData.contact_name
+  //   : this.state.contact_name,
+  //   contact_telephone: userData && userData._id
+  //   ? userData.contact_telephone
+  //   : this.state.contact_telephone,
+  //   contact_email: userData && userData._id
+  //   ? userData.contact_email
+  //   : this.state.contact_email,
+  //   contact_fax: userData && userData._id
+  //   ? userData.contact_fax
+  //   : this.state.contact_fax,
+  //   contact_extension: userData && userData._id
+  //   ? userData.contact_extension
+  //   : this.state.contact_extension,
 
   
+  // })
+
+  this.setState({
+  contact_name:sessionStorage.getItem('contact_name1'),
   })
- 
+
+  
   }
 
 
@@ -79,12 +84,13 @@ class AddCustomerContact extends React.Component {
     })
     console.log('Contact Email=', this.state.contact_email)
   }
-  handleContactName(e) {
-    this.setState({
-      contact_name: e.target.value.toUpperCase(),
-    })
-    console.log('Contact Name=', this.state.contact_name)
-  }
+  handleContactName(event) {
+    this.setState(
+      {
+        contact_name:event.target.value.toUpperCase()
+      },() => {
+        console.log('contact_name' , event.target.value)
+        window.sessionStorage.setItem("contact_name1",this.state.contact_name);})}
   
   handleFax(e) {
     this.setState({
@@ -166,35 +172,34 @@ class AddCustomerContact extends React.Component {
   }
 
   render() {
-    const userData = this.props.location.aboutProps && this.props.location.aboutProps.userData
 
     return (
       <div>
         <ul className='nav nav-tabs nav-line-tabs mb-5 fs-6'>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link  to={{pathname:'/apps/customers/UpdateCustomers', aboutProps: {userData}}}>
+              <Link  to={{pathname:'/apps/customers/UpdateCustomers'}}>
                 <h6 className='text-primary'> Customer Details</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to={{pathname:'/apps/customers/UpdateAccounting', aboutProps: {userData}}}>
+              <Link to={{pathname:'/apps/customers/UpdateAccounting'}}>
                 <h6 className='text-primary'> Accounting</h6>
               </Link>
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link active'>
-            <Link to={{ pathname: '/apps/customers/UpdateCustomerContact',aboutProps: { userData}}} > 
+            <Link to={{ pathname: '/apps/customers/UpdateCustomerContact'}} > 
             <h6 className='text-primary'> Customer Contact Details</h6></Link>
               
             </a>
           </li>
           <li className='nav-item'>
             <a className='nav-link'>
-              <Link to={{pathname:'/apps/customers/UpdateCustomizeUnit', aboutProps: {userData}}}>
+              <Link to={{pathname:'/apps/customers/UpdateCustomizeUnit'}}>
                 {' '}
                 <h6 className='text-primary'> Customize Units</h6>
               </Link>
@@ -313,7 +318,7 @@ class AddCustomerContact extends React.Component {
 
               <div className='d-flex flex-stack pt-15'>
                 <div className='mr-2'>
-                <Link to={{ pathname: '/apps/customers/UpdateCustomerContact',aboutProps: { userData}}} > 
+                <Link to={{ pathname: '/apps/customers/UpdateCustomerContact'}} > 
                     <button
                       type='button'
                       className='btn btn-lg btn-light-primary me-3'

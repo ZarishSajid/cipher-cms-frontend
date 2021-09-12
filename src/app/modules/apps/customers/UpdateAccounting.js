@@ -177,7 +177,6 @@ class UpdateAccounting extends React.Component {
                     </div>
                     <div className='fv-row mb-10 fv-plugins-icon-container fv-plugins-bootstrap5-row-valid'>
                       <label className='form-label form-label text-dark fw-bolder '>Available Credit</label>
-
                       <input
                         type='text'
                         value={this.state.available_credit}
